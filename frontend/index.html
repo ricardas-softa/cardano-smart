@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>Cardano Smart</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Highlight.js Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/haskell.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="https://kit.fontawesome.com/f30fff1d76.js" crossorigin="anonymous"></script>
+
+    <script src="/js/thinking.js"></script>
+</head>
+<body>
+    <div class="header" id="header-container">
+        <img src="logo_150.png" alt="Logo" class="logo" />
+        <h1>Cardano Smart <i class="fa-solid fa-robot"></i></h1>  
+    </div>
+    <div id="chatFeed"></div>
+    <div class="bottom-container">
+        <form id="questionForm">
+            <input type="text" id="questionInput" placeholder="Type your message here">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <div class="options-container">
+        <div class="context-switch">
+            <label for="useContext">Use Context:</label>
+            <input type="checkbox" id="useContext" name="useContext" checked>
+        </div>
+        <p class="show-resources">Show Sources</p>
+        <p class="show-json">Show Raw JSON</p>
+    </div>
+    <div id="sources" class="hidden">
+        <h2>Sources</h2>
+        <ul id="sourceList"></ul>
+    </div>
+    <div id="jsonResponse" class="hidden">
+        <h2>Raw JSON Response (for debugging)</h2>
+        <pre id="jsonContent"></pre>
+    </div>
+    <script src="/js/chat.js"></script>
+</body>
+</html>

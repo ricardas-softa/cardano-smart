@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: private-gpt-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: private-gpt
+  template:
+    metadata:
+      labels:
+        app: private-gpt
+    spec:
+      containers:
+      - name: private-gpt
+        image: softa/private-gpt:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /mnt/shared
+        env:
+        - name: PORT
+          value: "8080"
+        - name: PGPT_PROFILES
+          value: "docker"
+        - name: PGPT_MODE
+          value: "ollama"
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "1"
+          limits:
+            memory: "10Gi"
+            cpu: "2"
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: private-gpt-pvc

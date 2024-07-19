@@ -1,0 +1,54 @@
+services:
+  ollama-service:
+    image: ollama/ollama:latest
+    volumes:
+      - ./models:/root/.ollama
+    ports:
+      - 11434:11434
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    runtime: nvidia
+    networks:
+      - private-network
+
+  init-ollama:
+      image: alpine:latest
+      depends_on:
+        - ollama-service
+      entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl && while ! curl -sf http://ollama-service:11434/api/tags; do echo waiting for ollama-service; sleep 5; done; curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"wizardlm2\"}' && curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"nomic-embed-text\"}'"]
+      networks:
+        - private-network
+
+  private-gpt-service:
+    build:
+      context: ./private-gpt
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./private-gpt/local_data/:/home/worker/app/local_data
+      - ./MATERIAL/:/home/worker/app/MATERIAL
+    ports:
+      - 8001:8001
+    environment:
+      PORT: 8001
+      PGPT_PROFILES: docker
+      PGPT_MODE: ollama
+    depends_on:
+      - init-ollama
+    networks:
+      - private-network
+
+  frontend-service:
+    build: frontend
+    ports:
+      - "80:3000"
+    depends_on:
+      - private-gpt-service
+    networks:
+      - private-network
+
+networks:
+  private-network:
+    driver: bridge

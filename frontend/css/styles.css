@@ -1,0 +1,392 @@
+:root {
+    --primary-color: #1DB954;
+    --background-color: #121212;
+    --text-color: #fff;
+    --button-bg-color: #1DB954;
+    --button-hover-bg-color: #1ab34a;
+
+    --base-font-size: calc(0.6vw + 0.6vh + 0.5vmin);
+    --scaling-factor: 1;
+    --code-font-size: calc(var(--base-font-size) * 0.80);
+}
+
+html {
+    font-size: var(--base-font-size);
+}
+body {
+    font-family: 'Arial', sans-serif;
+    font-size: var(--base-font-size);
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    height: 97vh;
+}
+.icon i {
+    font-size: calc(1rem * var(--scaling-factor));
+}
+input, button, .copy-button, .continue-button {
+    font-size: calc(1rem * var(--scaling-factor));
+    padding: 12px 20px;
+}
+h1 {
+    color: #1DB954;
+    margin: 0;
+    font-size: calc(2.25rem * var(--scaling-factor));
+    white-space: nowrap; /* Keep the header in a single line */
+}
+#chatFeed {
+    background-color: #1E1E1E;
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    min-height: 20vh;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: #b2b7b2;
+    flex-grow: 1;
+    overflow-y: auto;
+    font-size: calc(1rem * var(--scaling-factor));
+}
+#chatFeed strong {
+    color: #6cb485;
+}
+#questionForm {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+}
+#questionInput {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background-color: #252526;
+    color: #ddd;
+    font-size: var(--base-font-size);
+}
+button {
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: none;
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+.hidden {
+    display: none;
+}
+.show-resources, .show-json {
+    color: #1DB954;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: calc(1rem * var(--scaling-factor));
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: var(--code-font-size);
+}
+
+.code-container {
+    position: relative;
+    margin-top: 10px;
+}
+
+.code-header {
+    font-family: 'Arial', sans-serif;
+    background: #1E1E1E;
+    color: #1DB954;
+    padding: 5px 10px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--code-font-size);
+}
+
+.copy-button {
+    background: none;
+    border: none;
+    color: #1DB954;
+    cursor: pointer;
+    font-size: var(--code-font-size);
+}
+
+pre {
+    margin: 0;
+    border-radius: 0 0 4px 4px;
+}
+
+#jsonContent {
+    font-size: var(--base-font-size);
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #1DB954;
+
+    animation: spin 1s ease infinite;
+}
+
+.continue-button {
+    padding: 5px 10px;
+    margin-top: 10px;
+    background-color: #1c47ae;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+}
+
+.context-switch {
+    color: var(--primary-color);
+    margin-top: 10px;
+    font-size: calc(1rem * var(--scaling-factor));
+}
+
+.context-switch input[type="checkbox"] {
+    margin-left: 10px;
+    accent-color: var(--primary-color);
+}
+
+.icon {
+    margin-right: 5px;
+}
+
+#chatFeed p {
+    display: flex;
+    align-items: center;
+}
+
+.context-switch input[type="checkbox"] {
+    transform: scale(2.0);
+    margin-top: 0;
+}
+
+#sources, #jsonResponse {
+    font-size: var(--base-font-size);
+}
+
+body, button, input, .copy-button, .continue-button, #chatFeed p, .code-container, .code-header, pre {
+    font-size: var(--base-font-size);
+}
+            
+.bottom-container {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#questionForm, .context-switch, .show-resources, .show-json {
+    flex-shrink: 0;
+}
+
+.context-switch, .show-resources, .show-json {
+    margin: 0;
+    padding: 5px 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.options-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: calc(1rem * var(--scaling-factor));
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.logo {
+    height: 150px;
+    margin-right: 20px;
+}
+
+#chatFeed i {
+    color: #1DB954;
+    font-weight: bold;
+}
+
+.user-message {
+    color: #1DB954;
+    font-weight: bold;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    :root {
+        --base-font-size: calc(0.6vw + 0.6vh + 2vmin);
+        --scaling-factor: 0.85;
+    }
+    body {
+        padding: 10px;
+    }
+    #chatFeed {
+        padding: 10px;
+        max-height: 80vh;
+        margin-bottom: 0;
+    }
+    .header {
+        margin-bottom: 10px;
+    }
+    .logo {
+        height: 48px;
+        margin-right: 10px;
+    }
+    .bottom-container {
+        flex-direction: column;
+    }
+    .show-resources, .show-json {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .options-container {
+        flex-direction: row;
+    }
+    .context-switch, .show-resources, .show-json {
+        width: 30%;
+        text-align: center;
+    }
+    #questionForm {
+        margin-top: 10px;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1199px) {
+    :root {
+        --base-font-size: calc(0.6vw + 0.6vh + 1.5vmin);
+        --scaling-factor: 0.85;
+    }
+    #chatFeed {
+        padding: 10px;
+        max-height: 85vh;
+    }
+    .header {
+        margin-bottom: 10px;
+    }
+    .logo {
+        height: 64px;
+        margin-right: 10px;
+    }
+}
+
+@media screen and (min-width: 1800px) {
+    :root {
+        --scaling-factor: 1;
+    }
+    #questionInput, button {
+        padding: 15px 25px;
+    }
+    .context-switch input[type="checkbox"] {
+        transform: scale(3.0);
+    }
+    #chatFeed {
+        padding: 20px;
+        margin-bottom: 20px;
+        max-height: 80vh;
+    }
+    .bottom-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #questionForm {
+        flex-grow: 1;
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    #questionInput {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
+}
+
+.button-container {
+    margin-top: auto;
+}
+
+.drift-text {
+    position: absolute;
+    white-space: nowrap;
+    font-size: calc(10px + 2vmin);
+    color: #1DB954;
+    animation: drift 5s linear infinite;
+    filter: blur(0px);
+}
+
+.drift-text.fade-out {
+    animation: driftFadeOut 5s linear forwards;
+}
+
+@keyframes drift {
+    0% {
+        transform: translateY(80px) scale(1);
+        opacity: 0.3;
+        filter: blur(0px);
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-200%) scale(1.5);
+        opacity: 0;
+        filter: blur(2px);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        filter: blur(2px);
+    }
+}
+
+@keyframes driftFadeOut {
+    0% {
+        /* Initial properties similar to drift animation */
+        transform: translateY(80px) scale(1);
+        opacity: 0.0;
+        filter: blur(0px);
+    }
+    60% {
+        /* Start fading out while continuing to move */
+        opacity: 0.6;
+        transform: translateY(-50%) scale(1.2);
+        filter: blur(1px);
+    }
+    100% {
+        /* Complete fade out */
+        transform: translateY(-200%) scale(1.5);
+        opacity: 0;
+        filter: blur(2px);
+    }
+}

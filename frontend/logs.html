@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Log Viewer</title>
+</head>
+<body>
+    <h1>Chat Log Viewer</h1>
+    <div id="logsContainer"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/logs')
+                .then(response => response.json())
+                .then(logs => {
+                    const logsContainer = document.getElementById('logsContainer');
+                    logs.forEach(log => {
+                    const logElement = document.createElement('div');
+                    logElement.innerHTML = `
+                        <p><strong>Accessed At:</strong> ${formatDate(log[2])}</p>
+                        <p><strong>IP Address:</strong> ${log[3]}</p>
+                        <p><strong>Prompt:</strong> ${log[4]}</p>
+                        <p><strong>Response:</strong> ${log[5]}</p>
+                        <hr>
+                    `;
+                    logsContainer.appendChild(logElement);
+                    });
+                })
+                .catch(error => {
+                    console.error('Failed to fetch logs:', error);
+                });
+        });
+
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString(); // Default locale, you can specify locales and options
+        }
+
+    </script>
+</body>
+</html>
