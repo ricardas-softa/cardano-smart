@@ -2,3 +2,5 @@ doc-scraper/venv/
 doc-scraper/documentation_scraper/documentation_scraper/__pycache__/
 doc-scraper/documentation_scraper/documentation_scraper/spiders/__pycache__
 doc-scraper/documentation_scraper/docs.json
+frontend/chat.log
+frontend/chat_usage.db

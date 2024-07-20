@@ -124,4 +124,5 @@ app.use((err, req, res, next) => {
 
 
 const port = 3000;
-app.listen(port, () => console.log(`Server running on PORT ${port}`));
+const host = "0.0.0.0";
+app.listen({ port, hostname: host }, () => console.log(`Server running on http://${host}:${port}`));

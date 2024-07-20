@@ -4,7 +4,7 @@ metadata:
   name: ollama-deployment
   namespace: default
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: ollama
@@ -18,15 +18,13 @@ spec:
         image: ollama/ollama:latest
         imagePullPolicy: Always
         resources:
-          limits:
-            cpu: "1250m"
-            ephemeral-storage: "10Gi"
-            memory: "20Gi"
-            nvidia.com/gpu: 1
           requests:
-            cpu: "600m"
-            ephemeral-storage: "4Gi"
-            memory: "9Gi"
+            cpu: "1800m"
+            memory: "10Gi"
+            nvidia.com/gpu: 1
+          limits:
+            cpu: "1800m"
+            memory: "10Gi"
             nvidia.com/gpu: 1
         securityContext:
           capabilities:
@@ -38,7 +36,7 @@ spec:
           readOnly: true
       nodeSelector:
         cloud.google.com/gke-accelerator: nvidia-tesla-t4
-        cloud.google.com/gke-accelerator-count: "1"
+        cloud.google.com/compute-class: Accelerator
       tolerations:
       - key: "nvidia.com/gpu"
         operator: "Exists"

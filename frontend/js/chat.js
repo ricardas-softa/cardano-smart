@@ -31,27 +31,27 @@ document.getElementById("questionForm").addEventListener("submit", async (event)
     sendMessageToModel();
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/client-ip')
-      .then(response => response.json())
-      .then(data => {
-        const currentIp = data.ip;
-        fetch('/last-access-time')
-          .then(response => response.json())
-          .then(accessData => {
-            const inputField = document.getElementById('questionInput');
-            if (accessData.lastAccessTime !== 'Never' && accessData.lastAccessTime < 180 && accessData.lastAccessIP !== currentIp) {
-              inputField.disabled = true;
-              inputField.placeholder = "Chat is temporarily locked due to recent activity from another location.";
-            } else {
-              inputField.disabled = false;
-              inputField.placeholder = "Type your message here";
-            }
-          })
-          .catch(error => console.error('Error fetching last access time:', error));
-      })
-      .catch(error => console.error('Error fetching client IP:', error));
-  });
+// document.addEventListener("DOMContentLoaded", function() {
+//     fetch('/client-ip')
+//       .then(response => response.json())
+//       .then(data => {
+//         const currentIp = data.ip;
+//         fetch('/last-access-time')
+//           .then(response => response.json())
+//           .then(accessData => {
+//             const inputField = document.getElementById('questionInput');
+//             if (accessData.lastAccessTime !== 'Never' && accessData.lastAccessTime < 180 && accessData.lastAccessIP !== currentIp) {
+//               inputField.disabled = true;
+//               inputField.placeholder = "Chat is temporarily locked due to recent activity from another location.";
+//             } else {
+//               inputField.disabled = false;
+//               inputField.placeholder = "Type your message here";
+//             }
+//           })
+//           .catch(error => console.error('Error fetching last access time:', error));
+//       })
+//       .catch(error => console.error('Error fetching client IP:', error));
+//   });
   
 function copyToClipboard(textToCopy) {
     // Create a temporary textarea element

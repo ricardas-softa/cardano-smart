@@ -31,11 +31,11 @@ spec:
           value: "ollama"
         resources:
           requests:
-            memory: "8Gi"
-            cpu: "1"
+            memory: "12Gi"
+            cpu: "1800m"
           limits:
-            memory: "10Gi"
-            cpu: "2"
+            memory: "15Gi"
+            cpu: "1800m"
       volumes:
       - name: shared-storage
         persistentVolumeClaim:
