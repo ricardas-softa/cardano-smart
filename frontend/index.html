@@ -22,33 +22,56 @@
     <script src="/js/thinking.js"></script>
 </head>
 <body>
-    <div class="header" id="header-container">
-        <img src="logo_150.png" alt="Logo" class="logo" />
-        <h1>Cardano Smart <i class="fa-solid fa-robot"></i></h1>  
+    <header class="header" id="header-container">
+        <div class="header-content">
+            <img src="logo_150.png" alt="Logo" class="logo" />
+            <h1>Cardano Smart <i class="fa-solid fa-robot"></i></h1>
+            <span id="version-display"></span>
+        </div>
+    </header>
+    <div class="thinking-indicator">
+        <div class="spinner"></div>
+        <div class="text">Thinking...</div>
     </div>
     <div id="chatFeed"></div>
     <div class="bottom-container">
         <form id="questionForm">
             <input type="text" id="questionInput" placeholder="Type your message here">
-            <button type="submit">Send</button>
+            <button type="submit" aria-label="Send message">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </form>
     </div>
     <div class="options-container">
-        <div class="context-switch">
-            <label for="useContext">Use Context:</label>
-            <input type="checkbox" id="useContext" name="useContext" checked>
+        <div class="left-options">
+            <div class="context-switch">
+                <input type="checkbox" id="useContext" name="useContext" checked>
+                <label for="useContext" class="switch">
+                    <span class="slider"></span>
+                    <span class="switch-text">Use Context</span>
+                </label>
+            </div>
+            <button class="references-button">
+                <i class="fas fa-chevron-up"></i>
+                <span>Show References</span>
+            </button>
         </div>
-        <p class="show-resources">Show Sources</p>
-        <p class="show-json">Show Raw JSON</p>
+        <div class="right-options">
+            <button class="show-sources" onclick="window.open('sources.html', '_blank')">Sources</button>
+        </div>
     </div>
-    <div id="sources" class="hidden">
-        <h2>Sources</h2>
+    <div id="sources">
+        <h2>References</h2>
         <ul id="sourceList"></ul>
     </div>
-    <div id="jsonResponse" class="hidden">
-        <h2>Raw JSON Response (for debugging)</h2>
-        <pre id="jsonContent"></pre>
-    </div>
     <script src="/js/chat.js"></script>
+    <script src="/js/version.js"></script>
+    <div id="referencesPopup" class="popup">
+        <div class="popup-content">
+            <h2>References</h2>
+            <ul id="popupSourceList"></ul>
+            <button id="closeReferences" class="close-button">&times;</button>
+        </div>
+    </div>
 </body>
 </html>

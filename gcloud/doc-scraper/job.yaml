@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: doc-scraper-job
+  namespace: default
+spec:
+  template:
+    metadata:
+      labels:
+        app: doc-scraper
+    spec:
+      containers:
+      - name: doc-scraper
+        image: softa/cardano-smart-scraper:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /app/data
+        env:
+        - name: OUTPUT_PATH
+          value: "/app/data"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+      restartPolicy: Never
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: filestore-pvc
+  backoffLimit: 3  # Number of retries before marking the job as failed

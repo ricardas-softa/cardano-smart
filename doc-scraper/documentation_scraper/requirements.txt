@@ -37,3 +37,7 @@ typing_extensions==4.12.2
 urllib3==2.2.2
 w3lib==2.2.1
 zope.interface==6.4.post2
+html2text
+selenium
+webdriver-manager
+

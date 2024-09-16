@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: doc-scraper-cronjob
+  namespace: default
+spec:
+  schedule: "0 4 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        metadata:
+          labels:
+            app: doc-scraper
+        spec:
+          containers:
+          - name: doc-scraper
+            image: softa/cardano-smart-scraper:latest
+            imagePullPolicy: Always
+            volumeMounts:
+            - name: shared-storage
+              mountPath: /app/data  # Mount the shared PVC at /app/data inside the container
+            env:
+            - name: OUTPUT_PATH
+              value: "/app/data"
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "1500m"
+              limits:
+                memory: "2Gi"
+                cpu: "2000m"
+          restartPolicy: Never
+          volumes:
+          - name: shared-storage
+            persistentVolumeClaim:
+              claimName: filestore-pvc

@@ -1,0 +1,252 @@
+.header {
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: none;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.header h1 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+
+#version-display {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    flex-shrink: 0;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 600px) {
+    .header {
+        padding: 10px;
+    }
+
+    .header-content {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .logo {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .header h1 {
+        font-size: 1.2rem;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    #version-display {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+h1 {
+    font-size: 1.2rem;
+    color: var(--background-color);
+    text-align: center;
+}
+
+.tab-container {
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    gap: 10px;
+}
+
+.tab-button, 
+.show-sources {
+    background-color: var(--button-bg-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: 0.3s;
+    font-size: 16px;
+    color: var(--text-color);
+    border-radius: 20px;
+    opacity: 0.7;
+}
+
+.tab-button:hover, 
+.show-sources:hover {
+    background-color: var(--button-hover-bg-color);
+    opacity: 1;
+}
+
+.tab-button.active,
+.show-sources {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    opacity: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.sources-container, .report-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+}
+
+.report-item {
+    margin-bottom: 15px;
+}
+
+.report-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.report-item ul {
+    padding-left: 20px;
+}
+
+body.local-mode::before {
+    content: 'Local Mode';
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    z-index: 1000;
+}
+
+#report-content > p {
+    margin-bottom: 20px;
+}
+
+.report-item:first-of-type {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    h1 {
+        font-size: 1rem;
+    }
+
+    .tab-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .tab-content {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    li {
+        font-size: 0.9rem;
+    }
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-link:hover {
+    text-decoration: none;
+}
+
+.sources-description {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: rgba(var(--primary-color-rgb), 0.05);
+    border: none;
+    border-radius: 5px;
+}
+
+.sources-description p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin: 0;
+    opacity: 0.8;
+}

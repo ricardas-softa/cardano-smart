@@ -48,12 +48,18 @@ Cardano Smart is an open-source project that integrates with [PrivateGPT](https:
 5. Deploy PrivateGPT:
     ```sh
     cd gcloud/private-gpt
+    kubectl apply -f pvc.yaml
+    kubectl apply -f role-binding.yaml
+    kubectl apply -f service-account.yaml
+    kubectl apply -f service.yaml
     ./deploy.sh
+    kubectl apply -f cronjob.yaml
     ```
 
 6. Deploy Cardano Smart frontend:
     ```sh
     cd gcloud/frontend
+    kubectl apply -f service.yaml
     ./deploy.sh
     ```
 

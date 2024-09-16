@@ -15,7 +15,14 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: softa/cardano-smart:latest
+        image: softa/cardano-smart:1.0.43
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /mnt/shared
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: filestore-pvc

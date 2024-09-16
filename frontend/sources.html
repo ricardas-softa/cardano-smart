@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardano Smart - Sources</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/sources.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://kit.fontawesome.com/f30fff1d76.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="header" id="header-container">
+        <div class="header-content">
+            <a href="/" class="header-link">
+                <img src="logo_150.png" alt="Logo" class="logo" />
+                <h1>Cardano Smart <i class="fa-solid fa-robot"></i></h1>
+            </a>
+            <span id="version-display"></span>
+        </div>
+    </header>
+    <div class="tab-container">
+        <button class="tab-button active" onclick="openTab(event, 'scraping-sources')">Scraping Sources</button>
+        <button class="tab-button" onclick="openTab(event, 'imported-files')">Imported Files</button>
+    </div>
+    <div id="scraping-sources" class="tab-content active">
+        <div class="sources-container">
+            <div class="sources-description">
+                <p>
+                    The following links serve as entry points to comprehensive documentation on various aspects of Cardano development. 
+                    Each link may lead to dozens of interconnected pages that are scraped nightly to ensure our AI assistant has the most up-to-date information. 
+                    This automated process allows us to maintain an extensive and current knowledge base, enabling more accurate and helpful responses to your queries.
+                </p>
+            </div>
+            <section>
+                <h2>Cardano Documentation</h2>
+                <ul>
+                    <li><a href="https://docs.cardano.org/about-cardano/introduction/" target="_blank">Introduction to Cardano</a></li>
+                    <li><a href="https://docs.cardano.org/developer-resources/welcome/" target="_blank">Developer Resources</a></li>
+                    <li><a href="https://developers.cardano.org/docs/get-started/" target="_blank">Get Started with Cardano</a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>Aiken</h2>
+                <ul>
+                    <li><a href="https://aiken-lang.org/installation-instructions" target="_blank">Installation Instructions</a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>Haskell</h2>
+                <ul>
+                    <li><a href="https://learnyouahaskell.github.io/introduction.html" target="_blank">Learn You a Haskell</a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>Lucid</h2>
+                <ul>
+                    <li><a href="https://lucid.spacebudz.io/docs/overview/about-lucid/" target="_blank">About Lucid</a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>Mesh</h2>
+                <ul>
+                    <li><a href="https://meshjs.dev/guides/nextjs" target="_blank">Next.js Guide</a></li>
+                    <li><a href="https://meshjs.dev/guides/minting-on-nodejs" target="_blank">Minting on Node.js</a></li>
+                    <li><a href="https://meshjs.dev/guides/multisig-minting" target="_blank">Multisig Minting</a></li>
+                    <li><a href="https://meshjs.dev/guides/prove-wallet-ownership" target="_blank">Prove Wallet Ownership</a></li>
+                    <li><a href="https://meshjs.dev/guides/custom-provider" target="_blank">Custom Provider</a></li>
+                    <li><a href="https://meshjs.dev/guides/smart-contract-transactions" target="_blank">Smart Contract Transactions</a></li>
+                    <li><a href="https://meshjs.dev/guides/aiken" target="_blank">Aiken Guide</a></li>
+                    <li><a href="https://meshjs.dev/guides/standalone" target="_blank">Standalone Guide</a></li>
+                    <li><a href="https://meshjs.dev/guides/vesting" target="_blank">Vesting Guide</a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>Plutus</h2>
+                <ul>
+                    <li><a href="https://plutus.cardano.intersectmbo.org/docs/" target="_blank">Plutus Documentation</a></li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    <div id="imported-files" class="tab-content">
+        <div class="report-container">
+            <h2>Last Scraping Report</h2>
+            <div id="report-content">Loading...</div>
+        </div>
+    </div>
+    <script src="/js/sources.js"></script>
+    <script src="/js/version.js"></script>
+</body>
+</html>

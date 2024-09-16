@@ -1,0 +1,26 @@
+# This pod is used to manually upload files to the Filestore volume.
+# To use this pod:
+# 1. Apply this YAML: kubectl apply -f filestore-upload-pod.yaml
+# 2. Wait for the pod to be running: kubectl get pods
+# 3. Copy files to the pod: kubectl cp /local/path/file.txt filestore-upload-pod:/mnt/filestore/
+# 4. To access the pod's shell: kubectl exec -it filestore-upload-pod -- /bin/sh
+# 5. When done, delete the pod: kubectl delete pod filestore-upload-pod
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: filestore-upload-pod
+  namespace: default
+spec:
+  containers:
+  - name: uploader
+    image: busybox
+    command: ["sh", "-c", "sleep 3600"]
+    volumeMounts:
+    - name: filestore-volume
+      mountPath: /mnt/filestore
+  volumes:
+  - name: filestore-volume
+    persistentVolumeClaim:
+      claimName: filestore-pvc
+  restartPolicy: Never

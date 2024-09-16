@@ -39,6 +39,9 @@ COPY fern/ fern
 COPY *.yaml *.md ./
 COPY scripts/ scripts
 COPY entrypoint.sh ./entrypoint.sh
+COPY ingest.sh ./ingest.sh
+COPY prepare_ingest.sh ./prepare_ingest.sh
+COPY diff_report.py ./diff_report.py
 
 RUN chown -R worker:nogroup /home/worker/app
 

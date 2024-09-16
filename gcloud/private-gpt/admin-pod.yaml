@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: admin-pod
+  namespace: default
+spec:
+  containers:
+    - name: admin-container
+      image: alpine
+      command: ["sleep", "infinity"]  # Keeps the pod running
+      volumeMounts:
+        - mountPath: /mnt/private-gpt
+          name: private-gpt-storage
+  volumes:
+    - name: private-gpt-storage
+      persistentVolumeClaim:
+        claimName: private-gpt-pvc
+  securityContext:
+    runAsUser: 0  # Runs as root user
+    runAsGroup: 0
+
+# kubectl apply -f admin-pod.yaml
+# kubectl exec -it admin-pod -- /bin/sh
+# kubectl delete pod admin-pod

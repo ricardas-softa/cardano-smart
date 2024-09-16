@@ -1,5 +1,5 @@
-import { opine, serveStatic, json } from "https://deno.land/x/opine/mod.ts";
-import { DB } from "https://deno.land/x/sqlite/mod.ts";
+import { opine, serveStatic, json, DB } from "./deps.ts";
+import { getUrlForFilename } from "./ts/url_finder.ts";
 
 // Open a SQLite database
 const db = new DB("./chat_usage.db");
@@ -31,6 +31,21 @@ app.post("/ask", async (req, res) => {
       body: JSON.stringify(requestBody),
     });
     const data = await response.json();
+
+    // If sources are present, add source_url to each source
+    if (data.choices && data.choices[0] && data.choices[0].sources) {
+      const rootDirectory = "/mnt/shared/";
+      data.choices[0].sources = await Promise.all(data.choices[0].sources.map(async (source) => {
+        if (source.document && source.document.doc_metadata) {
+          const fileName = source.document.doc_metadata.file_name;
+          const sourceUrl = await getUrlForFilename(rootDirectory, fileName);
+          return { ...source, source_url: sourceUrl };
+        }
+        return source;
+      }));
+    }
+
+    // console.log("Processed data:", JSON.stringify(data, null, 2)); // Keep this for debugging
 
     const responseData = data.choices && data.choices.length > 0 ? data.choices[0].message.content : '';
 
@@ -78,12 +93,31 @@ app.get("/client-ip", (req, res) => {
   res.json({ ip });
 });
 
+app.get("/scraping-report", async (req, res) => {
+  const isLocalMode = req.query.mode === 'local';
+  try {
+    let reportPath;
+    if (isLocalMode) {
+      reportPath = "./report.json"; // Local file path
+    } else {
+      reportPath = "/mnt/shared/report.json"; // Shared volume path
+    }
+    const reportContent = await Deno.readTextFile(reportPath);
+    const report = JSON.parse(reportContent);
+
+    // Filter out 'report.json' from changed_files
+    report.changed_files = report.changed_files.filter(file => file !== 'report.json');
+
+    res.json(report);
+  } catch (error) {
+    console.error('Failed to fetch scraping report:', error);
+    res.setStatus(500).json({ error: "Failed to fetch scraping report" });
+  }
+});
 
 app.post("/context", async (req, res) => {
-  const text = req.body.text || ""; // Expect a text string
-  const url = "http://private-gpt-service:8001/v1/chunks"; // URL of the external API for context
-
-  // Prepare the request body with the text
+  const text = req.body.text || "";
+  const url = "http://private-gpt-service:8001/v1/chunks";
   const requestBody = { text };
 
   try {
@@ -95,10 +129,34 @@ app.post("/context", async (req, res) => {
 
     const data = await response.json();
 
+    // Process each item in the data array
+    if (data.data && Array.isArray(data.data)) {
+      const rootDirectory = "/mnt/shared/";
+      for (const item of data.data) {
+        if (item.document && item.document.doc_metadata && item.document.doc_metadata.file_name) {
+          const fileName = item.document.doc_metadata.file_name;
+          const sourceUrl = await getUrlForFilename(rootDirectory, fileName);
+          item.source_url = sourceUrl;
+        }
+      }
+    }
+
+    console.log("Processed data:", JSON.stringify(data, null, 2)); // Add this line for debugging
+
     res.setStatus(response.status).json(data);
   } catch (error) {
     console.error(error);
     res.setStatus(500).send("Internal Server Error");
+  }
+});
+
+app.get("/version", async (req, res) => {
+  try {
+    const version = await Deno.readTextFile("./version.txt");
+    res.json({ version: version.trim() });
+  } catch (error) {
+    console.error('Failed to read version:', error);
+    res.setStatus(500).json({ error: "Failed to read version" });
   }
 });
 
@@ -121,7 +179,6 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.setStatus(500).json({ error: "Internal Server Error" });
 });
-
 
 const port = 3000;
 const host = "0.0.0.0";

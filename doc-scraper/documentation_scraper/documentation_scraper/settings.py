@@ -9,6 +9,11 @@
 
 BOT_NAME = "documentation_scraper"
 
+# DEPTH_LIMIT = 4
+
+# Avoid duplicate requests
+DUPEFILTER_CLASS = 'scrapy.dupefilters.RFPDupeFilter'
+
 SPIDER_MODULES = ["documentation_scraper.spiders"]
 NEWSPIDER_MODULE = "documentation_scraper.spiders"
 
@@ -27,7 +32,7 @@ CONCURRENT_REQUESTS = 16
 # See also autothrottle settings and docs
 DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 8
+CONCURRENT_REQUESTS_PER_DOMAIN = 1  # Only one request at a time to the domain
 CONCURRENT_REQUESTS_PER_IP = 8
 
 # Disable cookies (enabled by default)
@@ -63,7 +68,7 @@ CONCURRENT_REQUESTS_PER_IP = 8
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   "documentation_scraper.pipelines.JsonWriterPipeline": 300,
+   "documentation_scraper.pipelines.TextFileWriterPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -87,7 +92,14 @@ AUTOTHROTTLE_DEBUG = False
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
-# Set settings whose default value is deprecated to a future-proof value
-REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
-FEED_EXPORT_ENCODING = "utf-8"
+# Remove or comment out these lines if they exist
+# DOWNLOAD_HANDLERS = {
+#     "http": "scrapy_playwright.handler.PlaywrightDownloadHandler",
+#     "https": "scrapy_playwright.handler.PlaywrightDownloadHandler",
+# }
+
+# Add this line to use the default reactor
+# TWISTED_REACTOR = 'twisted.internet.default'
+
+# Enable logging
+LOG_LEVEL = 'INFO'

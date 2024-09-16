@@ -2,8 +2,9 @@
     --primary-color: #1DB954;
     --background-color: #121212;
     --text-color: #fff;
-    --button-bg-color: #1DB954;
-    --button-hover-bg-color: #1ab34a;
+    --text-color-grey: #808080;
+    --button-bg-color: #2a2a2a;
+    --button-hover-bg-color: #3a3a3a;
 
     --base-font-size: calc(0.6vw + 0.6vh + 0.5vmin);
     --scaling-factor: 1;
@@ -32,12 +33,6 @@ input, button, .copy-button, .continue-button {
     font-size: calc(1rem * var(--scaling-factor));
     padding: 12px 20px;
 }
-h1 {
-    color: #1DB954;
-    margin: 0;
-    font-size: calc(2.25rem * var(--scaling-factor));
-    white-space: nowrap; /* Keep the header in a single line */
-}
 #chatFeed {
     background-color: #1E1E1E;
     border: none;
@@ -54,11 +49,6 @@ h1 {
 }
 #chatFeed strong {
     color: #6cb485;
-}
-#questionForm {
-    display: flex;
-    gap: 0;
-    margin-bottom: 0;
 }
 #questionInput {
     flex-grow: 1;
@@ -152,14 +142,54 @@ pre {
 }
 
 .context-switch {
-    color: var(--primary-color);
-    margin-top: 10px;
-    font-size: calc(1rem * var(--scaling-factor));
+    display: flex;
+    align-items: center;
 }
 
-.context-switch input[type="checkbox"] {
-    margin-left: 10px;
-    accent-color: var(--primary-color);
+.context-switch label.switch {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 105px;
+    height: 34px;
+    background-color: var(--button-bg-color);
+    border-radius: 17px;
+    position: relative;
+    transition: background-color .2s;
+    padding: 0 10px 0 45px; /* Increased left padding to accommodate the slider */
+}
+
+.context-switch label.switch .slider {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: 0.2s;
+    background-color: var(--background-color);
+    box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
+}
+
+.context-switch label.switch .switch-text {
+    color: var(--text-color);
+    font-size: 12px;
+    font-weight: bold;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.context-switch input:checked + label.switch {
+    background-color: var(--primary-color);
+}
+
+.context-switch input:checked + label.switch .slider {
+    left: calc(100% - 32px);
+}
+
+.context-switch input:checked + label.switch .switch-text {
+    color: var(--background-color);
 }
 
 .icon {
@@ -205,142 +235,133 @@ body, button, input, .copy-button, .continue-button, #chatFeed p, .code-containe
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    font-size: calc(1rem * var(--scaling-factor));
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.left-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Style for the Sources button */
+.show-sources, .references-button {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 20px; /* Pill shape */
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.show-sources:hover, references-button:hover {
+    background-color: var(--button-hover-bg-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for the Send button */
+#questionForm button[type="submit"] {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    border-radius: 50%; /* Make it circular */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#questionForm button[type="submit"]:hover {
+    background-color: var(--button-hover-bg-color);
+    transform: scale(1.05);
+}
+
+#questionForm button[type="submit"] i {
+    font-size: 18px;
+}
+
+#questionForm {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 .header {
+    background-color: var(--background-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-content {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
-    overflow: hidden;
-    width: 100%;
+    justify-content: flex-start;
+    max-width: none; /* Remove the max-width constraint */
+    margin: 0; /* Remove auto margins */
 }
 
 .logo {
-    height: 150px;
-    margin-right: 20px;
+    height: 40px;
+    margin-right: 15px;
 }
 
-#chatFeed i {
-    color: #1DB954;
-    font-weight: bold;
+h1 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin: 0;
+    white-space: nowrap;
 }
 
-.user-message {
-    color: #1DB954;
-    font-weight: bold;
+#version-display {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-color-grey);
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
+/* Media query for smaller screens */
 @media screen and (max-width: 600px) {
-    :root {
-        --base-font-size: calc(0.6vw + 0.6vh + 2vmin);
-        --scaling-factor: 0.85;
-    }
-    body {
-        padding: 10px;
-    }
-    #chatFeed {
-        padding: 10px;
-        max-height: 80vh;
-        margin-bottom: 0;
-    }
-    .header {
-        margin-bottom: 10px;
-    }
-    .logo {
-        height: 48px;
-        margin-right: 10px;
-    }
-    .bottom-container {
+    .header-content {
         flex-direction: column;
-    }
-    .show-resources, .show-json {
-        display: inline-block;
-        margin-right: 10px;
-    }
-    .options-container {
-        flex-direction: row;
-    }
-    .context-switch, .show-resources, .show-json {
-        width: 30%;
+        align-items: center;
         text-align: center;
     }
-    #questionForm {
-        margin-top: 10px;
-    }
-}
 
-@media screen and (min-width: 601px) and (max-width: 1199px) {
-    :root {
-        --base-font-size: calc(0.6vw + 0.6vh + 1.5vmin);
-        --scaling-factor: 0.85;
-    }
-    #chatFeed {
-        padding: 10px;
-        max-height: 85vh;
-    }
-    .header {
+    .logo {
+        margin-right: 0;
         margin-bottom: 10px;
     }
-    .logo {
-        height: 64px;
-        margin-right: 10px;
-    }
-}
 
-@media screen and (min-width: 1800px) {
-    :root {
-        --scaling-factor: 1;
+    h1 {
+        margin-bottom: 5px;
     }
-    #questionInput, button {
-        padding: 15px 25px;
-    }
-    .context-switch input[type="checkbox"] {
-        transform: scale(3.0);
-    }
-    #chatFeed {
-        padding: 20px;
-        margin-bottom: 20px;
-        max-height: 80vh;
-    }
-    .bottom-container {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
-    #questionForm {
-        flex-grow: 1;
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
-    }
-    #questionInput {
-        flex-grow: 1;
-        margin-right: 10px;
-    }
-}
 
-.button-container {
-    margin-top: auto;
+    #version-display {
+        margin-left: 0;
+    }
 }
 
 .drift-text {
     position: absolute;
     white-space: nowrap;
     font-size: calc(10px + 2vmin);
-    color: #1DB954;
+    color: var(--primary-color);
     animation: drift 5s linear infinite;
     filter: blur(0px);
+    pointer-events: none;
 }
 
 .drift-text.fade-out {
@@ -363,30 +384,287 @@ body, button, input, .copy-button, .continue-button, #chatFeed p, .code-containe
     }
 }
 
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        filter: blur(2px);
-    }
-}
-
 @keyframes driftFadeOut {
     0% {
-        /* Initial properties similar to drift animation */
         transform: translateY(80px) scale(1);
         opacity: 0.0;
         filter: blur(0px);
     }
     60% {
-        /* Start fading out while continuing to move */
         opacity: 0.6;
         transform: translateY(-50%) scale(1.2);
         filter: blur(1px);
     }
     100% {
-        /* Complete fade out */
         transform: translateY(-200%) scale(1.5);
         opacity: 0;
         filter: blur(2px);
     }
+}
+
+/* ... rest of the styles ... */
+
+.header h1 {
+    color: var(--primary-color); /* This should already be set to your green color */
+    font-size: 1.5rem;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* ... rest of the styles ... */
+
+/* Add this to your existing styles */
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.thinking-indicator {
+    position: fixed;
+    top: 100px; /* Increased from 60px to 100px */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(29, 185, 84, 0.1);
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.thinking-indicator.visible {
+    opacity: 1;
+}
+
+.thinking-indicator .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary-color);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.thinking-indicator .text {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.context-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(29, 185, 84, 0.1);
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.context-indicator.visible {
+    opacity: 1;
+}
+
+#sources {
+    background-color: var(--button-bg-color);
+    border-radius: 8px;
+    padding: 0;
+    margin-top: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+}
+
+#sources.open {
+    max-height: 80vh; /* Adjust this value as needed */
+    padding: 15px;
+    opacity: 1;
+    overflow-y: auto; /* Add scroll if content exceeds max-height */
+}
+
+#sources h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--background-color);
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+#popupSourceList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#popupSourceList li {
+    background-color: var(--button-bg-color);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+#popupSourceList li, #sourceList li {
+    background-color: var(--button-bg-color);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+#popupSourceList li strong {
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 5px;
+}
+
+#popupSourceList li strong, #sourceList li strong {
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+#popupSourceList li .source-content, #sourceList li .source-content {
+    color: var(--text-color);
+    font-size: 0.9em;
+    line-height: 1.5;
+    white-space: normal;
+    word-wrap: break-word;
+    margin-bottom: 10px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+}
+
+#sourceList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#sourceList li {
+    background-color: var(--button-bg-color);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.source-file-name {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.source-excerpt {
+    color: var(--text-color-grey);
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.source-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    align-self: flex-start;
+    padding: 5px 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 15px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.source-link:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.show-resources {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.show-resources:hover {
+    background-color: var(--button-hover-bg-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.references-button {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 20px; /* Pill shape */
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.references-button:hover {
+    background-color: var(--button-hover-bg-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.references-button i {
+    transition: transform 0.3s;
+}
+
+.references-button.open i {
+    transform: rotate(180deg);
 }

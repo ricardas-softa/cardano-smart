@@ -8,4 +8,4 @@ import scrapy
 class DocumentationItem(scrapy.Item):
     title = scrapy.Field()
     container = scrapy.Field()
-
+    url = scrapy.Field()

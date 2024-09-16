@@ -4,20 +4,32 @@ let codeBlockMarkCount = 0; // Global variable to keep track of the number of co
 
 let continuationStack = []; // Global array to keep track of continuation messages
 
+let useContext = true; // Global variable to track context usage
 
-document.querySelector('.show-resources').addEventListener('click', () => {
-    const sourcesDiv = document.getElementById('sources');
-    sourcesDiv.classList.toggle('hidden');
-});
+document.addEventListener('DOMContentLoaded', () => {
+    const useContextCheckbox = document.getElementById('useContext');
+    const referencesButton = document.querySelector('.references-button');
+    const referencesPopup = document.getElementById('referencesPopup');
+    const closeReferencesButton = document.getElementById('closeReferences');
 
-document.querySelector('.show-json').addEventListener('click', () => {
-    const jsonDiv = document.getElementById('jsonResponse');
-    jsonDiv.classList.toggle('hidden');
-});
+    useContextCheckbox.addEventListener('change', (event) => {
+        useContext = event.target.checked;
+    });
 
-document.getElementById("useContext").addEventListener("change", (event) => {
-    const use_context = event.target.checked;
-    document.querySelector('.show-resources').classList.toggle("hidden", !use_context);
+    referencesButton.addEventListener('click', () => {
+        referencesPopup.style.display = 'block';
+        updateReferencesPopup();
+    });
+
+    closeReferencesButton.addEventListener('click', () => {
+        referencesPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === referencesPopup) {
+            referencesPopup.style.display = 'none';
+        }
+    });
 });
 
 document.getElementById("questionForm").addEventListener("submit", async (event) => {
@@ -31,28 +43,6 @@ document.getElementById("questionForm").addEventListener("submit", async (event)
     sendMessageToModel();
 });
 
-// document.addEventListener("DOMContentLoaded", function() {
-//     fetch('/client-ip')
-//       .then(response => response.json())
-//       .then(data => {
-//         const currentIp = data.ip;
-//         fetch('/last-access-time')
-//           .then(response => response.json())
-//           .then(accessData => {
-//             const inputField = document.getElementById('questionInput');
-//             if (accessData.lastAccessTime !== 'Never' && accessData.lastAccessTime < 180 && accessData.lastAccessIP !== currentIp) {
-//               inputField.disabled = true;
-//               inputField.placeholder = "Chat is temporarily locked due to recent activity from another location.";
-//             } else {
-//               inputField.disabled = false;
-//               inputField.placeholder = "Type your message here";
-//             }
-//           })
-//           .catch(error => console.error('Error fetching last access time:', error));
-//       })
-//       .catch(error => console.error('Error fetching client IP:', error));
-//   });
-  
 function copyToClipboard(textToCopy) {
     // Create a temporary textarea element
     const textarea = document.createElement('textarea');
@@ -88,18 +78,12 @@ function responseIsIncomplete(messageContent) {
 }
 
 async function sendMessageToModel(isContinuation = false) {
-    const chatFeed = document.getElementById("chatFeed");
-    const useContextCheckbox = document.getElementById("useContext");
-
-    if (!isContinuation) {
-        codeBlockMarkCount = 0;
-        continuationStack = [];
-    }
+    showThinkingIndicator();
     
     const question = chatHistory[chatHistory.length - 1];
     if (question && question.role !== "system" && question.content !== "continue")  {
         appendMessage(question.role, ` ${question.content}`);
-        fetchContext(question.content);
+        await fetchContext(question.content);  // Wait for context to be fetched
     }
 
     const spinner = document.createElement("div");
@@ -113,7 +97,7 @@ async function sendMessageToModel(isContinuation = false) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ messages: chatHistory, use_context: useContextCheckbox.checked })
+            body: JSON.stringify({ messages: chatHistory, use_context: useContext })
         });
         
         if (!response.ok) {
@@ -198,23 +182,16 @@ async function sendMessageToModel(isContinuation = false) {
             hljs.highlightBlock(block);
         });
 
-        const sources = data.choices[0].sources;
-        if (sources && sources.length > 0) {
-            const sourceList = document.getElementById("sourceList");
-            sourceList.innerHTML = ""; // Clear existing list items
-            sources.forEach(source => {
-                const li = document.createElement("li");
-                li.textContent = `Document: ${source.document.doc_metadata.file_name}, Page: ${source.document.doc_metadata.page_label}, Excerpt: ${source.text}`;
-                sourceList.appendChild(li);
-            });
+        if (data.choices && data.choices.length > 0 && data.choices[0].sources) {
+            updateReferences(data.choices[0].sources);
+        } else {
+            updateReferences([]);
         }
-        
-        document.getElementById("jsonContent").textContent = JSON.stringify(data, null, 2);
     } catch (error) {
         console.error('Error:', error);
         spinner.textContent = "Error fetching response.";
     } finally {
-        spinner.remove();
+        hideThinkingIndicator();
     }
 }
 
@@ -240,6 +217,7 @@ async function fetchContext(text) {
         
         const contextTexts = data.data.map(chunk => chunk.text);
 
+        // Start emitting texts with the actual context
         startEmittingTexts(contextTexts);
 
         return data;
@@ -318,3 +296,66 @@ function containsMarkdown(text) {
     // Check if two or more markdown features are detected
     return matchCount >= 2;
 }
+
+function showThinkingIndicator() {
+    const indicator = document.querySelector('.thinking-indicator');
+    indicator.classList.add('visible');
+}
+
+function hideThinkingIndicator() {
+    const indicator = document.querySelector('.thinking-indicator');
+    indicator.classList.remove('visible');
+}
+
+function updateReferences(references) {
+    currentReferences = references;
+    const sourceList = document.getElementById("sourceList");
+    sourceList.innerHTML = ""; // Clear existing list items
+
+    if (references.length > 0) {
+        references.forEach(source => {
+            if (source.document && source.document.doc_metadata) {
+                const li = document.createElement("li");
+                const fileName = source.document.doc_metadata.file_name;
+                const excerpt = source.text;
+                const sourceUrl = source.source_url || '#';
+
+                li.innerHTML = `
+                    <strong>${fileName}</strong>
+                    <div class="source-content">${excerpt}</div>
+                    <a href="${sourceUrl}" target="_blank" class="source-link">View Source</a>
+                `;
+                sourceList.appendChild(li);
+            }
+        });
+    } else {
+        sourceList.innerHTML = '<li>No references available</li>';
+    }
+}
+
+function updateReferencesPopup() {
+    const popupSourceList = document.getElementById('popupSourceList');
+    popupSourceList.innerHTML = ''; // Clear existing content
+
+    if (currentReferences.length > 0) {
+        currentReferences.forEach(source => {
+            if (source.document && source.document.doc_metadata) {
+                const li = document.createElement('li');
+                const fileName = source.document.doc_metadata.file_name;
+                const excerpt = source.text;
+                const sourceUrl = source.source_url || '#';
+
+                li.innerHTML = `
+                    <strong>${fileName}</strong>
+                    <div class="source-content">${excerpt}</div>
+                    <a href="${sourceUrl}" target="_blank" class="source-link">View Source</a>
+                `;
+                popupSourceList.appendChild(li);
+            }
+        });
+    } else {
+        popupSourceList.innerHTML = '<li>No references available</li>';
+    }
+}
+
+let currentReferences = [];
