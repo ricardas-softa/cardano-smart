@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: restart-private-gpt
+  namespace: cardano-smart
+spec:
+  schedule: "0 5 * * *"  # Runs daily at 05:00 AM
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: restart-deployment
+            image: bitnami/kubectl:latest
+            command:
+              - /bin/sh
+              - -c
+              - |
+                kubectl scale deployment/private-gpt-deployment --replicas=0
+                sleep 30
+                kubectl scale deployment/private-gpt-deployment --replicas=1
+          restartPolicy: OnFailure
+          serviceAccountName: deployment-restart-sa

@@ -204,6 +204,7 @@ pre {
 .context-switch input[type="checkbox"] {
     transform: scale(2.0);
     margin-top: 0;
+    display: none;
 }
 
 #sources, #jsonResponse {
@@ -301,6 +302,7 @@ body, button, input, .copy-button, .continue-button, #chatFeed p, .code-containe
     border-bottom: 2px solid var(--primary-color);
     padding: 10px 20px;
     width: 100%;
+    height: 60px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -667,4 +669,40 @@ h1 {
 
 .references-button.open i {
     transform: rotate(180deg);
+}
+
+.thinking-process {
+    background-color: #262826;
+    border-left: 4px solid #6c757d;
+    margin: 10px 0;
+    padding: 10px 15px;
+    font-style: italic;
+    color: #318a50;
+}
+
+.thinking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #1db954;
+}
+
+.toggle-thinking {
+    background: none;
+    border: none;
+    color: #1db954;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 5px;
+    transition: transform 0.2s;
+}
+
+.toggle-thinking:hover {
+    opacity: 0.8;
+}
+
+.thinking-content {
+    transition: all 0.3s ease;
 }

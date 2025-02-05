@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: cardano-smart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: softa/cardano-smart:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /mnt/shared
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: cardano-smart-pvc

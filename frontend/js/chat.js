@@ -247,6 +247,17 @@ function appendMessage(role, content) {
 }
 
 function markdownToHTML(text) {
+    // Update think tag handling to include a toggle button
+    text = text.replace(/<think>([\s\S]*?)<\/think>/g, 
+        '<div class="thinking-process">' +
+            '<div class="thinking-header">' +
+                '<span>💭 Thinking Process</span>' +
+                '<button class="toggle-thinking">▼</button>' +
+            '</div>' +
+            '<div class="thinking-content">$1</div>' +
+        '</div>'
+    );
+
     text = text.replace(/^(\#{1,6})\s+(.*)$/gm, function(_, hashes, content) {
         return `<h${hashes.length}>${content}</h${hashes.length}>`;
     });
@@ -359,3 +370,14 @@ function updateReferencesPopup() {
 }
 
 let currentReferences = [];
+
+// Add this new function at the end of the file
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('toggle-thinking')) {
+        const content = e.target.closest('.thinking-process').querySelector('.thinking-content');
+        const isCollapsed = content.style.display === 'none';
+        
+        content.style.display = isCollapsed ? 'block' : 'none';
+        e.target.textContent = isCollapsed ? '▼' : '▶';
+    }
+});

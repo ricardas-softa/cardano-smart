@@ -27,8 +27,8 @@ services:
       context: ./private-gpt
       dockerfile: Dockerfile.local
     volumes:
-      - ./private-gpt/local_data/:/home/worker/app/local_data
-      - ./MATERIAL/:/home/worker/app/MATERIAL
+      - ./private-gpt/:/mnt/shared
+      - ./shared-data:/home/worker/app/docs
     ports:
       - 8001:8001
     environment:
@@ -42,10 +42,21 @@ services:
 
   frontend-service:
     build: frontend
+    volumes:
+      - ./shared-data:/mnt/shared
     ports:
       - "80:3000"
     depends_on:
       - private-gpt-service
+    networks:
+      - private-network
+
+  doc-scraper:
+    image: softa/cardano-smart-scraper:latest
+    volumes:
+      - ./shared-data:/app/data
+    environment:
+      OUTPUT_PATH: "/app/data"
     networks:
       - private-network
 

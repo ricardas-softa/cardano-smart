@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: doc-scraper-cronjob
+  namespace: cardano-smart
+spec:
+  schedule: "3 16 * * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        metadata:
+          labels:
+            app: doc-scraper
+        spec:
+          containers:
+          - name: doc-scraper
+            image: softa/cardano-smart-scraper:latest
+            imagePullPolicy: Always
+            securityContext:
+              runAsUser: 0  # Run as root
+            volumeMounts:
+            - name: shared-storage
+              mountPath: /app/data
+            env:
+            - name: OUTPUT_PATH
+              value: "/app/data"
+            resources:
+              requests:
+                memory: "1Gi"
+                cpu: "6"
+              limits:
+                memory: "2Gi"
+                cpu: "12"
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          volumes:
+          - name: shared-storage
+            persistentVolumeClaim:
+              claimName: cardano-smart-pvc

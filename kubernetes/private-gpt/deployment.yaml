@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: private-gpt-deployment
+  namespace: cardano-smart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: private-gpt
+  template:
+    metadata:
+      labels:
+        app: private-gpt
+    spec:
+      securityContext:              # Pod-level securityContext
+        fsGroup: 1000               # Ensures group ownership of the mounted volumes
+      initContainers:               # Prepare the RAM disk with required folder and permissions
+      - name: init-ramdisk
+        image: busybox
+        command: ["sh", "-c"]
+        args:
+          - |
+            mkdir -p /mnt/shared/ingestive
+            chmod -R 777 /mnt/shared
+        volumeMounts:
+        - name: ram-storage
+          mountPath: /mnt/shared
+      containers:
+      - name: private-gpt
+        image: softa/private-gpt-ollama:latest
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 0  # Run as root
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: PGPT_PROFILES
+          value: "docker"
+        - name: PGPT_MODE
+          value: "ollama"
+        resources:
+          requests:
+            memory: "16Gi"
+            cpu: "1800m"
+          limits:
+            memory: "16Gi"
+            cpu: "1800m"
+        # securityContext:            # Container-level securityContext
+        #   runAsUser: 1000           # Run the container as user ID 1000
+        #   runAsGroup: 1000          # Run the container as group ID 1000
+        volumeMounts:
+        - name: ram-storage
+          mountPath: /mnt/shared  # Mounting the RAM-based volume here
+        - name: shared-storage
+          mountPath: /home/worker/app/docs  # NFS volume for scraped documents
+      volumes:
+      - name: ram-storage
+        emptyDir:
+          medium: Memory  # This tells Kubernetes to use tmpfs (RAM) for the volume
+          sizeLimit: 3Gi  # Optional: Limit the size to 3 GiB
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: cardano-smart-pvc

@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ollama-model-downloader
+  namespace: cardano-smart
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure  # Retry if it fails
+      containers:
+      - name: model-downloader
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            apk add --no-cache curl;
+            echo "Waiting for Ollama to be ready...";
+            until curl -sf http://ollama-service.cardano-smart.svc.cluster.local:11434/api/tags; do
+              echo "Ollama service not ready yet. Retrying...";
+              sleep 5;
+            done;
+            echo "Ollama is ready. Pulling models...";
+            curl -X POST http://ollama-service.cardano-smart.svc.cluster.local:11434/api/pull -d '{"name": "llama3.2"}';
+            curl -X POST http://ollama-service.cardano-smart.svc.cluster.local:11434/api/pull -d '{"name": "nomic-embed-text"}';
+            echo "Models successfully pulled. Exiting.";
+        volumeMounts:
+          - name: models
+            mountPath: /root/.ollama
+      volumes:
+      - name: models
+        emptyDir: {}
