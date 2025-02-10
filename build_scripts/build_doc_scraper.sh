@@ -17,4 +17,4 @@ docker build -t softa/cardano-smart-scraper:latest .
 docker push softa/cardano-smart-scraper:latest
 
 # Success message
-echo "Doc scraper built successfull
+echo "Doc scraper built successfull"
