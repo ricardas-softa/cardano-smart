@@ -1,5 +1,7 @@
 FROM python:3.11.6-slim-bookworm as base
 
+USER root
+
 # Install poetry
 RUN pip install pipx
 RUN python3 -m pipx ensurepath
@@ -28,20 +30,21 @@ EXPOSE 8080
 # More info about how to configure UIDs and GIDs in Docker:
 # https://github.com/systemd/systemd/blob/main/docs/UIDS-GIDS.md
 
-# Define the User ID (UID) for the non-root user
-# UID 100 is chosen to avoid conflicts with existing system users
-ARG UID=100
 
-# Define the Group ID (GID) for the non-root user
-# GID 65534 is often used for the 'nogroup' or 'nobody' group
-ARG GID=65534
+ARG UID=1000
+ARG GID=1000
 
-RUN adduser --system --gid ${GID} --uid ${UID} --home /home/worker worker
+# Create the group first, then the user
+RUN groupadd --gid ${GID} worker && \
+    adduser --system --gid ${GID} --uid ${UID} --home /home/worker worker
+
 WORKDIR /home/worker/app
 
 RUN chown worker /home/worker/app
-RUN mkdir local_data && chown worker local_data
+RUN mkdir -p local_data/private_gpt
+RUN chown -R worker local_data
 RUN mkdir models && chown worker models
+RUN chmod -R 777 /home/worker/app/local_data
 RUN mkdir -p /mnt/shared/ingestive && chmod -R 777 /mnt/shared
 COPY --chown=worker --from=dependencies /home/worker/app/.venv/ .venv
 COPY --chown=worker private_gpt/ private_gpt

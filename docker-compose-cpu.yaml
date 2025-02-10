@@ -5,12 +5,6 @@ services:
       - ./models:/root/.ollama
     ports:
       - 11434:11434
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
-    runtime: nvidia
     networks:
       - private-network
 
@@ -18,7 +12,7 @@ services:
       image: alpine:latest
       depends_on:
         - ollama-service
-      entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl && while ! curl -sf http://ollama-service:11434/api/tags; do echo waiting for ollama-service; sleep 5; done; curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"deepseek-r1\"}' && curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"nomic-embed-text\"}'"]
+      entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl && while ! curl -sf http://ollama-service:11434/api/tags; do echo waiting for ollama-service; sleep 5; done; curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"llama3.2:1b\"}' && curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"nomic-embed-text\"}'"]
       networks:
         - private-network
 
@@ -66,8 +60,6 @@ services:
       - "80:3000"
     depends_on:
       - private-gpt-service
-    networks:
-      - private-network
     networks:
       - private-network
 

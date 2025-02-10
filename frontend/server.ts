@@ -2,7 +2,7 @@ import { opine, serveStatic, json, DB } from "./deps.ts";
 import { getUrlForFilename } from "./ts/url_finder.ts";
 
 // Open a SQLite database
-const db = new DB("./chat_usage.db");
+const db = new DB("./data/chat_usage.db");
 db.query("CREATE TABLE IF NOT EXISTS chat_log (id INTEGER PRIMARY KEY AUTOINCREMENT, endpoint TEXT, accessed_at DATETIME, ip_address TEXT, prompt TEXT, response TEXT)");
 
 const app = opine();

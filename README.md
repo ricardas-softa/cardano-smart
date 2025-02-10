@@ -276,28 +276,37 @@ This will show you installation process, but when it finished, the ingestion pro
 
 ## Docker Setup
 
-### Prerequisites
-
-### Resources required
-
-- Docker
-- Docker Compose
-
 1. Clone the repository:
     ```sh
     git clone https://github.com/ricardas-softa/cardano-smart
     cd cardano-smart
     ```
 
-2. Run the setup script:
+2. Run the setup script (this will setup the model to use GPU):
     ```sh
-    ./scripts/setup_local.sh
+    ./docker/setup_local.sh
     ```
 
-3. Start the services:
+    If you want to use CPU instead, run:
     ```sh
-    docker-compose up
+    ./docker/setup_local.sh --cpu
     ```
+
+    You can also explicitly specify that you want to use GPU:
+    ```sh
+    ./docker/setup_local.sh --gpu
+    ```
+
+3. Wait for the setup to finish. It will take some time for the doc-scraper to scrape the data and for the model to download and ingest the data.
+
+4. Once the setup is finished, you can start using Cardano Smart via browser by visiting http://localhost/
+
+If chat throws error, it means that the ingestion process is not finished yet. You can check the status by running:
+
+```sh
+docker logs -f cardano-smart-private-gpt
+```
+
 
 ## License
 

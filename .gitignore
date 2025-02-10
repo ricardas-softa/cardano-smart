@@ -5,4 +5,4 @@ doc-scraper/documentation_scraper/docs.json
 doc-scraper/documentation_scraper/data/
 doc-scraper/data/
 frontend/chat.log
-frontend/chat_usage.db
+frontend/data/chat_usage.db
