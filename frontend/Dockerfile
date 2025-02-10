@@ -9,7 +9,7 @@ ARG BUILD_DATE
 LABEL build_date=$BUILD_DATE
 
 # Create a directory for the database with proper permissions
-RUN mkdir -p /app/data && chown 1000:1000 /app/data
+RUN mkdir -p /app/data && chown -R 1000:1000 /app/data
 
 COPY deps.ts .
 RUN deno cache deps.ts
@@ -20,7 +20,5 @@ RUN deno cache server.ts
 COPY version.txt .
 
 EXPOSE 80
-
-USER 1000
 
 CMD ["run", "--allow-net", "--allow-read", "--allow-write", "server.ts"]

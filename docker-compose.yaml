@@ -58,7 +58,6 @@ services:
 
   frontend-service:
     build: frontend
-    user: "1000:1000"
     volumes:
       - ./shared-data:/mnt/shared
       - ./frontend/data:/app/data
@@ -66,8 +65,6 @@ services:
       - "80:3000"
     depends_on:
       - private-gpt-service
-    networks:
-      - private-network
     networks:
       - private-network
 

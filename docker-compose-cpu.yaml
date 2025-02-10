@@ -52,7 +52,6 @@ services:
 
   frontend-service:
     build: frontend
-    user: "1000:1000"
     volumes:
       - ./shared-data:/mnt/shared
       - ./frontend/data:/app/data
