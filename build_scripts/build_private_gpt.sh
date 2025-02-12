@@ -24,6 +24,12 @@ cp private_gpt_k8s_configs/ingest.sh private-gpt/ingest.sh
 cp private_gpt_k8s_configs/prepare_ingest.sh private-gpt/prepare_ingest.sh
 cp private_gpt_k8s_configs/diff_report.py private-gpt/diff_report.py
 
+# Set executable permissions
+chmod +x private-gpt/entrypoint.sh
+chmod +x private-gpt/ingest.sh
+chmod +x private-gpt/prepare_ingest.sh
+chmod +x private-gpt/diff_report.py
+
 # Update the model in settings-docker.yaml
 sed -i "s/llm_model: \".*\"/llm_model: \"$MODEL\"/" private-gpt/settings-docker.yaml
 

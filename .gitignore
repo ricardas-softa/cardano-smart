@@ -6,3 +6,5 @@ doc-scraper/documentation_scraper/data/
 doc-scraper/data/
 frontend/chat.log
 frontend/data/chat_usage.db
+models/
+shared-data/

@@ -5,12 +5,6 @@ services:
       - ./models:/root/.ollama
     ports:
       - 11434:11434
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
-    runtime: nvidia
     networks:
       - private-network
 
@@ -18,21 +12,9 @@ services:
       image: alpine:latest
       depends_on:
         - ollama-service
-      entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl && while ! curl -sf http://ollama-service:11434/api/tags; do echo waiting for ollama-service; sleep 5; done; curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"deepseek-r1:14b\"}' && curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"nomic-embed-text\"}'"]
+      entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl && while ! curl -sf http://ollama-service:11434/api/tags; do echo waiting for ollama-service; sleep 5; done; curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"llama3.1:8b\"}' && curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"nomic-embed-text\"}'"]
       networks:
         - private-network
-
-  doc-scraper:
-    build:
-      context: ./doc-scraper
-      dockerfile: Dockerfile
-    user: "1000:1000"
-    volumes:
-      - ./shared-data:/app/data
-    environment:
-      OUTPUT_PATH: "/app/data"
-    networks:
-      - private-network
 
   private-gpt-service:
     build:
@@ -48,10 +30,9 @@ services:
       PORT: 8001
       PGPT_PROFILES: docker
       PGPT_MODE: ollama
+      SKIP_INGESTION: "false"
     depends_on:
       init-ollama:
-        condition: service_completed_successfully
-      doc-scraper:
         condition: service_completed_successfully
     networks:
       - private-network

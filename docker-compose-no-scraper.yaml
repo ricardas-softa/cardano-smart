@@ -22,18 +22,6 @@ services:
       networks:
         - private-network
 
-  doc-scraper:
-    build:
-      context: ./doc-scraper
-      dockerfile: Dockerfile
-    user: "1000:1000"
-    volumes:
-      - ./shared-data:/app/data
-    environment:
-      OUTPUT_PATH: "/app/data"
-    networks:
-      - private-network
-
   private-gpt-service:
     build:
       context: ./private-gpt
@@ -48,10 +36,9 @@ services:
       PORT: 8001
       PGPT_PROFILES: docker
       PGPT_MODE: ollama
+      SKIP_INGESTION: "false"
     depends_on:
       init-ollama:
-        condition: service_completed_successfully
-      doc-scraper:
         condition: service_completed_successfully
     networks:
       - private-network

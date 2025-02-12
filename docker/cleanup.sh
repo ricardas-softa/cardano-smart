@@ -10,6 +10,9 @@ cd $PROJECT_ROOT
 # Stop and remove all containers from the docker-compose project
 echo "Stopping and removing containers..."
 docker compose --file docker-compose-cpu.yaml down
+docker compose --file docker-compose-cpu-no-scraper.yaml down
+docker compose --file docker-compose.yaml down
+docker compose --file docker-compose-no-scraper.yaml down
 
 # Remove all images used by the services
 echo "Removing images..."
@@ -23,8 +26,7 @@ docker image rm cardano-smart-repo-doc-scraper:latest
 echo "Removing network..."
 docker network rm private-network
 
-rm -rf private-gpt
-rm -rf shared-data/*
-rm -rf models/*
+# rm -rf shared-data/*
+# rm -rf models/*
 
 echo "Cleanup complete!" 
