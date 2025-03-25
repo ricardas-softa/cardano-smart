@@ -333,6 +333,9 @@ In Docker, when you start the deployment script, it scrapes and ingests data, th
 
 In Kubernetes, there are additional cronjobs that automatically control the scraping and ingestion process during the night.
 
+## Contribution
+Please check out [CONTRIBUTING](CONTRIBUTING.md) file for contribution information.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
