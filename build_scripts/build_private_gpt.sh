@@ -17,12 +17,12 @@ git submodule update --init --recursive
 
 # Apply custom configurations
 cp private_gpt_k8s_configs/settings-docker.yaml private-gpt/settings-docker.yaml
-cp private_gpt_k8s_configs/settings.yaml private-gpt/settings.yaml
+cp local_configs/settings.yaml private-gpt/settings.yaml
 cp private_gpt_k8s_configs/Dockerfile private-gpt/Dockerfile
 cp local_configs/entrypoint.sh private-gpt/entrypoint.sh
-cp private_gpt_k8s_configs/ingest.sh private-gpt/ingest.sh
-cp private_gpt_k8s_configs/prepare_ingest.sh private-gpt/prepare_ingest.sh
-cp private_gpt_k8s_configs/diff_report.py private-gpt/diff_report.py
+cp local_configs/ingest.sh private-gpt/ingest.sh
+cp local_configs/prepare_ingest.sh private-gpt/prepare_ingest.sh
+cp local_configs/diff_report.py private-gpt/diff_report.py
 
 # Set executable permissions
 chmod +x private-gpt/entrypoint.sh

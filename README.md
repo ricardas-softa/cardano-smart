@@ -307,6 +307,31 @@ If chat throws error, it means that the ingestion process is not finished yet. Y
 docker logs -f cardano-smart-private-gpt
 ```
 
+## Architectural Diagrams
+
+You can find the architectural diagrams in the `docs` folder.
+
+### Cardano Smart Launch
+When you launch Cardano Smart, it starts scraping the documentation and ingesting it into the vector database.
+
+![Cardano Smart Launch - Architecture Diagram](docs/Cardano%20Smart%20Launch%20-%20Architecture%20Diagram.png)
+
+
+![Cardano Smart Launch - Sequence Diagram](docs/Cardano%20Smart%20Launch%20-%20Sequence%20Diagram.png)
+
+### Cardano Smart Usage
+
+When you use Cardano Smart, it uses the vector database to search for the most relevant documentation and answer your questions.
+
+![Cardano Smart Usage - Architecture Diagram](docs/Cardano%20Smart%20Usage%20-%20Architecture%20Diagram.png)
+
+![Cardano Smart Usage - Sequence Diagram](docs/Cardano%20Smart%20Usage%20-%20Sequence%20Diagram.png)
+
+These diagrams apply to both Docker and Kubernetes setups, but there is a difference in the lifecycle of the services in Kubernetes.
+
+In Docker, when you start the deployment script, it scrapes and ingests data, then allows you to use the chat.
+
+In Kubernetes, there are additional cronjobs that automatically control the scraping and ingestion process during the night.
 
 ## License
 
