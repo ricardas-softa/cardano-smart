@@ -8,6 +8,11 @@ Cardano Smart is an open-source project that integrates with [PrivateGPT](https:
 - **Flexible Deployment Options:** Includes configurations for Google Cloud's Kubernetes Engine, local Docker setups, and private Kubernetes clusters.
 - **Enhanced Accessibility:** Utilizes advanced GPU resources for intensive computational tasks, making it ideal for data-heavy operations.
 
+## Video instructions
+
+Here is a video tutorial for Docker and Kubernetes setups
+[YouTube Video](https://www.youtube.com/watch?v=x6Suvoqor3M)
+
 ## Private Kubernetes Setup
 
 ### Prerequisites
