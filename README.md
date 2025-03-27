@@ -377,6 +377,94 @@ If you encounter issues during setup or deployment, try the following:
 
 If issues persist or you encounter new problems, please refer to our [CONTRIBUTING](CONTRIBUTING.md) file for guidance on submitting detailed bug reports and feature requests.
 
+## Operational Instructions
+
+### Renewing the Cardano documentation
+
+#### Docker setup
+
+The scraping and ingestion process is done automatically when you start the setup script.
+If you want to restart the whole process to renew the data, you can do it by cleaning up the containers and images and then running the setup script again.
+
+```sh
+./docker/cleanup.sh
+./docker/setup_local.sh [--model <new-model>]
+```
+
+#### Kubernetes setup
+
+In Kubernetes, the scraping and ingestion process is done automatically at first installation and automatically updates the data during the night.
+
+### Updating the model
+
+#### Docker setup
+
+To update the model, a good way would be to reinstall the setup with the new model.
+Run the `cleanup.sh` script and then the `setup_local.sh` script with the new model.
+
+```sh
+./docker/cleanup.sh
+./docker/setup_local.sh --model <new-model>
+```
+
+#### Kubernetes setup
+
+In Kubernetes, you need to update the model in the `private_gpt_k8s_configs/settings-docker.yaml` file and rebuild the private-gpt image.
+
+```sh
+./build_scripts/build_private_gpt.sh <new-model>
+```
+
+Then you need to apply the new image to the deployment.
+
+```sh
+kubectl rollout restart deployment private-gpt-deployment -n cardano-smart
+```
+
+### Updating the Cardano Smart project itself
+
+#### Docker setup
+
+To update the Cardano Smart project itself, you need to pull the latest changes from the repository and reinstal the setup.
+
+```sh
+git pull
+./docker/cleanup.sh
+./docker/setup_local.sh [--model <new-model>]
+```
+
+#### Kubernetes setup
+
+In Kubernetes, you need to pull the latest changes from the repository, build the images and reinstall the setup.
+
+```sh
+git pull
+./build_scripts/build_doc_scraper.sh
+./build_scripts/build_frontend.sh
+./build_scripts/build_private_gpt.sh [<new-model>]
+./kubernetes/uninstall-cardano-smart.sh
+./kubernetes/install-cardano-smart.sh
+```
+
+### Stopping and uninstalling the setup
+
+#### Docker setup
+
+To stop and uninstall, you can use the `cleanup.sh` script.
+
+```sh
+./docker/cleanup.sh
+```
+
+#### Kubernetes setup
+
+In Kubernetes, you need to use the `uninstall-cardano-smart.sh` script.
+
+```sh
+./kubernetes/uninstall-cardano-smart.sh
+```
+
+
 ## Architectural Diagrams
 
 You can find the architectural diagrams in the `docs` folder.
@@ -385,7 +473,6 @@ You can find the architectural diagrams in the `docs` folder.
 When you launch Cardano Smart, it starts scraping the documentation and ingesting it into the vector database.
 
 ![Cardano Smart Launch - Architecture Diagram](docs/Cardano%20Smart%20Launch%20-%20Architecture%20Diagram.png)
-
 
 ![Cardano Smart Launch - Sequence Diagram](docs/Cardano%20Smart%20Launch%20-%20Sequence%20Diagram.png)
 
