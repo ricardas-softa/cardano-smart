@@ -2,6 +2,20 @@
 
 Cardano Smart is an open-source project that integrates with [PrivateGPT](https://github.com/zylon-ai/private-gpt) to provide a comprehensive solution for LLM driven chat bot for Cardano documentation.
 
+## Table of Contents
+
+- [Features](#features)
+- [Video Instructions](#video-instructions)
+- [FAQ](#faq)
+- [Private Kubernetes Setup](#private-kubernetes-setup)
+- [Docker Setup](#docker-setup)
+- [Troubleshooting](#troubleshooting)
+- [Architectural Diagrams](#architectural-diagrams)
+- [Contribution](#contribution)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+
 ## Features
 
 - **Seamless Integration:** Offers both frontend and backend setup to ensure a smooth user experience.
@@ -11,7 +25,11 @@ Cardano Smart is an open-source project that integrates with [PrivateGPT](https:
 ## Video instructions
 
 Here is a video tutorial for Docker and Kubernetes setups
-[YouTube Video](https://www.youtube.com/watch?v=x6Suvoqor3M)
+[![Video Tutorial](https://img.youtube.com/vi/x6Suvoqor3M/0.jpg)](https://www.youtube.com/watch?v=x6Suvoqor3M)
+
+## FAQ
+
+See the [FAQ](FAQ.md) file for more information.
 
 ## Private Kubernetes Setup
 
@@ -304,13 +322,60 @@ This will show you installation process, but when it finished, the ingestion pro
 
 3. Wait for the setup to finish. It will take some time for the doc-scraper to scrape the data and for the model to download and ingest the data.
 
-4. Once the setup is finished, you can start using Cardano Smart via browser by visiting http://localhost/
+4. Once the setup is finished, you can start using Cardano Smart via browser by visiting [http://localhost/](http://localhost/)
 
-If chat throws error, it means that the ingestion process is not finished yet. You can check the status by running:
+If chat throws an error, it means that the ingestion process is not finished yet. You can check the status by running:
 
 ```sh
 docker logs -f cardano-smart-private-gpt
 ```
+
+## Troubleshooting
+
+If you encounter issues during setup or deployment, try the following:
+
+### Docker-Related Issues
+- **Docker Compose related issues:**  
+  - **Cause:** Docker Compose is not installed or not configured correctly.
+  - **Solution:** Install Docker Compose according to the [Docker Compose installation guide](https://docs.docker.com/compose/install/).
+
+### Build scripts fail
+- **Symptoms:** Build scripts fail with an error message.
+  - **Cause:** Dockerhub is not logged in.
+  - **Solution:**
+    - Log in to Dockerhub by running `docker login`.
+    - Also change the location of the images to your own container registry in build scripts and in Kubernetes deployments.
+
+### Kubernetes Deployment Issues
+- **Pods in CrashLoopBackOff or Pending States:**  
+  - **Cause:** Misconfigured YAML files, insufficient resources, or problems with persistent volumes.  
+  - **Solution:**  
+    - Run `kubectl logs <pod-name> -n cardano-smart` to inspect error messages.  
+    - Double-check your deployment, service, and storage configurations.  
+    - Confirm that your Kubernetes cluster meets the resource requirements.
+
+### Scraping or Ingestion Process Delays
+- **Symptoms:** The scraping or ingestion job (doc-scraper or privateGPT) is hanging or taking too long.  
+  - **Solution:**  
+    - Monitor scraping job logs using `kubectl logs -f -n cardano-smart doc-scraper-cronjob-xxxxxxxx-xxxxx` (press TAB after typing doc-scraper to autocomplete the job name), see if it's stuck in some step.
+    - Monitor ingestion job logs using `kubectl logs -f -n cardano-smart private-gpt-deployment-xxxxxxxx-xxxxx`, see if it's stuck in some step.
+    - If you see it working, then just Ctrl+C to stop the logs and wait for the job to finish.
+    - If there is an error, check the logs to see what's wrong.
+    - If you need to restart the job, you can do it by running `kubectl apply -f doc-scraper/cronjob.yaml` or `kubectl rollout restart deployment private-gpt-deployment -n cardano-smart`.
+    - Check network connectivity for downloading models and scraping data.
+    - Allow extra time, and consider scaling resources if necessary.
+
+### Service Accessibility Issues
+- **Frontend Not Reachable:**  
+  - **Cause:**
+    - Incorrect service configuration (e.g., wrong IP address in `service-load-balancer.yaml` or NodePort conflicts).  
+    - MetalLB is not installed or not configured correctly.
+  - **Solution:**  
+    - Verify that the IP and port settings in your service configuration match your network setup.  
+    - Use `kubectl get services -n cardano-smart` to confirm the service’s status and endpoints.
+    - If you are using self-hosted cluster, you need to install MetalLB and configure it correctly. Or you could use NodePort type service instead of LoadBalancer.
+
+If issues persist or you encounter new problems, please refer to our [CONTRIBUTING](CONTRIBUTING.md) file for guidance on submitting detailed bug reports and feature requests.
 
 ## Architectural Diagrams
 
