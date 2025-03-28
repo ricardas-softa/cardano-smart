@@ -24,7 +24,7 @@ Cardano Smart is an open-source project that integrates with [PrivateGPT](https:
 
 ## Video instructions
 
-Here is a video tutorial for Docker and Kubernetes setups
+Here is a video tutorial for Docker and Kubernetes setups - YouTube video link 👇
 [![Video Tutorial](demo.gif)](https://www.youtube.com/watch?v=x6Suvoqor3M)
 
 ## FAQ
