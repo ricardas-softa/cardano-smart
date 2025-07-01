@@ -187,9 +187,17 @@ async function sendMessageToModel(isContinuation = false) {
         } else {
             updateReferences([]);
         }
+        
     } catch (error) {
         console.error('Error:', error);
-        spinner.textContent = "Error fetching response.";
+        if (spinner.parentNode) {
+            spinner.textContent = "Error fetching response.";
+        } else {
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "error-message";
+            errorDiv.textContent = "Error fetching response: " + error.message;
+            chatFeed.appendChild(errorDiv);
+        }
     } finally {
         hideThinkingIndicator();
     }

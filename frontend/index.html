@@ -33,7 +33,9 @@
         <div class="spinner"></div>
         <div class="text">Thinking...</div>
     </div>
-    <div id="chatFeed"></div>
+    <div class="main-wrapper">
+        <div id="chatFeed"></div>
+    </div>
     <div class="bottom-container">
         <form id="questionForm">
             <input type="text" id="questionInput" placeholder="Type your message here">
@@ -41,23 +43,23 @@
                 <i class="fas fa-paper-plane"></i>
             </button>
         </form>
-    </div>
-    <div class="options-container">
-        <div class="left-options">
-            <div class="context-switch">
-                <input type="checkbox" id="useContext" name="useContext" checked>
-                <label for="useContext" class="switch">
-                    <span class="slider"></span>
-                    <span class="switch-text">Use Context</span>
-                </label>
+        <div class="options-container">
+            <div class="left-options">
+                <div class="context-switch">
+                    <input type="checkbox" id="useContext" name="useContext" checked>
+                    <label for="useContext" class="switch">
+                        <span class="slider"></span>
+                        <span class="switch-text">Use Context</span>
+                    </label>
+                </div>
+                <button class="references-button">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>Show References</span>
+                </button>
             </div>
-            <button class="references-button">
-                <i class="fas fa-chevron-up"></i>
-                <span>Show References</span>
-            </button>
-        </div>
-        <div class="right-options">
-            <button class="show-sources" onclick="window.open('sources.html', '_blank')">Sources</button>
+            <div class="right-options">
+                <button class="show-sources" onclick="window.open('sources.html', '_blank')">Sources</button>
+            </div>
         </div>
     </div>
     <div id="sources">

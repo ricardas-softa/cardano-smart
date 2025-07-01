@@ -19,6 +19,6 @@ RUN deno cache server.ts
 
 COPY version.txt .
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD ["run", "--allow-net", "--allow-read", "--allow-write", "server.ts"]
