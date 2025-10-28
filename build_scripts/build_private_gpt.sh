@@ -8,7 +8,7 @@ PROJECT_ROOT=$(cd $SCRIPT_DIR/..; pwd)
 cd $PROJECT_ROOT
 
 # Set default model and allow override through command line argument
-MODEL=${1:-"llama3.2:1b"}
+MODEL=${1:-"gpt-oss"}
 # VERSION="0.6.2.12"
 VERSION=latest
 # Initialize and update the submodule

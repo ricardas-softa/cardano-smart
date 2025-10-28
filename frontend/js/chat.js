@@ -4,17 +4,12 @@ let codeBlockMarkCount = 0; // Global variable to keep track of the number of co
 
 let continuationStack = []; // Global array to keep track of continuation messages
 
-let useContext = true; // Global variable to track context usage
+let useContext = true; // Always use context
 
 document.addEventListener('DOMContentLoaded', () => {
-    const useContextCheckbox = document.getElementById('useContext');
     const referencesButton = document.querySelector('.references-button');
     const referencesPopup = document.getElementById('referencesPopup');
     const closeReferencesButton = document.getElementById('closeReferences');
-
-    useContextCheckbox.addEventListener('change', (event) => {
-        useContext = event.target.checked;
-    });
 
     referencesButton.addEventListener('click', () => {
         referencesPopup.style.display = 'block';
@@ -141,33 +136,32 @@ async function sendMessageToModel(isContinuation = false) {
         });
 
         botMessageContent = botMessageContent.replace(/```(\w+)?\n(.*?)```/gs, (match, lang, code) => {
+            const escapedCode = code.trim().replace(/'/g, "\\'").replace(/"/g, '\\"');
+            const base64Code = btoa(unescape(encodeURIComponent(code.trim())));
+            
             if (lang) {
-                return `
-                    <div class="code-container">
-                        <div class="code-header">
-                            Language: ${lang.toUpperCase()}
-                            <button class="copy-button" onclick="copyToClipboard(atob('${btoa(code.trim())}'))">Copy code</button>
-                        </div>
-                        <pre><code class="language-${lang}">${code.trim()}</code></pre>
+                return `<div class="code-container">
+                    <div class="code-header">
+                        <span>Language: ${lang.toUpperCase()}</span>
+                        <button class="copy-button" onclick="copyToClipboard(atob('${base64Code}'))">Copy code</button>
                     </div>
-                `;
+                    <pre><code class="language-${lang}">${code.trim()}</code></pre>
+                </div>`;
             } else {
-                // If no language is recognized, do not include the language header
-                return `
-                    <div class="code-container">
-                        <div class="code-header">
-                            <button class="copy-button" onclick="copyToClipboard(atob('${btoa(code.trim())}'))">Copy code</button>
-                        </div>
-                        <pre><code>${code.trim()}</code></pre>
+                return `<div class="code-container">
+                    <div class="code-header">
+                        <span>Code</span>
+                        <button class="copy-button" onclick="copyToClipboard(atob('${base64Code}'))">Copy code</button>
                     </div>
-                `;
+                    <pre><code>${code.trim()}</code></pre>
+                </div>`;
             }
         });
 
         botMessageContent = markdownToHTML(botMessageContent);
         const botResponse = document.createElement("div");
         botResponse.className = "bot-response";
-        botResponse.innerHTML = `<i class="fa-solid fa-robot"></i> ${botMessageContent}`;
+        botResponse.innerHTML = `<i class="fa-solid fa-robot"></i><span class="message-content">${botMessageContent}</span>`;
 
         chatFeed.appendChild(botResponse);
         chatFeed.scrollTo({
@@ -236,19 +230,16 @@ async function fetchContext(text) {
 
 function appendMessage(role, content) {
     const chatFeed = document.getElementById("chatFeed");
-    const messageElement = document.createElement("p");
-    const iconSpan = document.createElement("span");
-    iconSpan.classList.add("icon");
+    const messageElement = document.createElement("div");
 
     if (role === "user") {
-        iconSpan.innerHTML = '<i class="fa-solid fa-user"></i>';
         messageElement.classList.add("user-message");
+        messageElement.innerHTML = `<i class="fa-solid fa-user"></i><span class="message-content">${content}</span>`;
     } else if (role === "assistant") {
-        iconSpan.innerHTML = '<i class="fa-solid fa-robot"></i>';
+        messageElement.classList.add("bot-response");
+        messageElement.innerHTML = `<i class="fa-solid fa-robot"></i><span class="message-content">${content}</span>`;
     }
 
-    messageElement.appendChild(iconSpan);
-    messageElement.innerHTML += "&nbsp;"+content;
     chatFeed.appendChild(messageElement);
     
     chatFeed.scrollTop = chatFeed.scrollHeight;
