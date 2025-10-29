@@ -5,7 +5,7 @@
     <meta viewport="width=device-width, initial-scale=1.0">
     <title>Cardano Smart</title>
 
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css?v=3.0">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -18,6 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/haskell.min.js"></script>
     <script>hljs.highlightAll();</script>
     <script src="https://kit.fontawesome.com/f30fff1d76.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <script src="/js/thinking.js"></script>
 </head>
@@ -33,7 +34,9 @@
         <div class="spinner"></div>
         <div class="text">Thinking...</div>
     </div>
-    <div id="chatFeed"></div>
+    <div class="main-wrapper">
+        <div id="chatFeed"></div>
+    </div>
     <div class="bottom-container">
         <form id="questionForm">
             <input type="text" id="questionInput" placeholder="Type your message here">
@@ -41,23 +44,16 @@
                 <i class="fas fa-paper-plane"></i>
             </button>
         </form>
-    </div>
-    <div class="options-container">
-        <div class="left-options">
-            <div class="context-switch">
-                <input type="checkbox" id="useContext" name="useContext" checked>
-                <label for="useContext" class="switch">
-                    <span class="slider"></span>
-                    <span class="switch-text">Use Context</span>
-                </label>
+        <div class="options-container">
+            <div class="left-options">
+                <button class="references-button">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>Show References</span>
+                </button>
             </div>
-            <button class="references-button">
-                <i class="fas fa-chevron-up"></i>
-                <span>Show References</span>
-            </button>
-        </div>
-        <div class="right-options">
-            <button class="show-sources" onclick="window.open('sources.html', '_blank')">Sources</button>
+            <div class="right-options">
+                <button class="show-sources" onclick="window.open('sources.html', '_blank')">Sources</button>
+            </div>
         </div>
     </div>
     <div id="sources">

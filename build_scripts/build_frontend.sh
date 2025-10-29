@@ -14,8 +14,8 @@ cd frontend
 # ./increment_version.sh
 
 # # Read the new version from version.txt
-# VERSION=$(cat version.txt)
-VERSION=latest
+VERSION=$(cat version.txt)
+# VERSION=latest
 
 echo "Building version $VERSION"
 

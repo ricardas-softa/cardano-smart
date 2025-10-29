@@ -10,13 +10,8 @@ services:
     runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    devices:
+      - "nvidia.com/gpu=all"
     networks:
       - private-network
 
@@ -24,7 +19,7 @@ services:
       image: alpine:latest
       depends_on:
         - ollama-service
-      entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl && while ! curl -sf http://ollama-service:11434/api/tags; do echo waiting for ollama-service; sleep 5; done; curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"deepseek-r1:14b\"}' && curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"nomic-embed-text\"}'"]
+      entrypoint: ["/bin/sh", "-c", "apk add --no-cache curl && while ! curl -sf http://ollama-service:11434/api/tags; do echo waiting for ollama-service; sleep 5; done; curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"gpt-oss\"}' && curl -X POST http://ollama-service:11434/api/pull -d '{\"name\": \"nomic-embed-text\"}'"]
       networks:
         - private-network
 

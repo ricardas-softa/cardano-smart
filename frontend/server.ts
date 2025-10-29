@@ -19,17 +19,33 @@ async function logToFile(data) {
 app.post("/ask", async (req, res) => {
   const chatHistory = req.body.messages || [];
   const useContext = req.body.use_context || false;
+  const stream = req.body.stream || false;
   const url = "http://private-gpt-service:8001/v1/chat/completions";
-  const requestBody = { messages: chatHistory, use_context: useContext, include_sources: true };
+  const requestBody = { messages: chatHistory, use_context: useContext, include_sources: true, stream: false }; // Force non-streaming for now
   const ip = req.headers.get("x-forwarded-for") || req.ip;
   const lastMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1].content : "";
 
   try {
+    // For now, we'll use non-streaming with a longer timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 600000); // 10 minute timeout
+
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Non-streaming response (existing code)
     const data = await response.json();
 
     // If sources are present, add source_url to each source

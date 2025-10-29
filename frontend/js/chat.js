@@ -4,17 +4,19 @@ let codeBlockMarkCount = 0; // Global variable to keep track of the number of co
 
 let continuationStack = []; // Global array to keep track of continuation messages
 
-let useContext = true; // Global variable to track context usage
+let useContext = true; // Always use context
+
+if (window.marked) {
+    marked.setOptions({
+        breaks: true,
+        gfm: true
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    const useContextCheckbox = document.getElementById('useContext');
     const referencesButton = document.querySelector('.references-button');
     const referencesPopup = document.getElementById('referencesPopup');
     const closeReferencesButton = document.getElementById('closeReferences');
-
-    useContextCheckbox.addEventListener('change', (event) => {
-        useContext = event.target.checked;
-    });
 
     referencesButton.addEventListener('click', () => {
         referencesPopup.style.display = 'block';
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
 document.getElementById("questionForm").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -103,6 +106,11 @@ async function sendMessageToModel(isContinuation = false) {
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Server error:', errorText);
+
+            if (response.status >= 500) {
+                showFriendlyError();
+            }
+
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -136,38 +144,16 @@ async function sendMessageToModel(isContinuation = false) {
             botMessageContent = `${joinedContinuationMessages}${botMessageContent}`;
         }
 
-        botMessageContent = botMessageContent.replace(/(```[\s\S]*?```)|\n/g, (match, codeBlock) => {
-            return codeBlock ? codeBlock : '<br>';
-        });
-
-        botMessageContent = botMessageContent.replace(/```(\w+)?\n(.*?)```/gs, (match, lang, code) => {
-            if (lang) {
-                return `
-                    <div class="code-container">
-                        <div class="code-header">
-                            Language: ${lang.toUpperCase()}
-                            <button class="copy-button" onclick="copyToClipboard(atob('${btoa(code.trim())}'))">Copy code</button>
-                        </div>
-                        <pre><code class="language-${lang}">${code.trim()}</code></pre>
-                    </div>
-                `;
-            } else {
-                // If no language is recognized, do not include the language header
-                return `
-                    <div class="code-container">
-                        <div class="code-header">
-                            <button class="copy-button" onclick="copyToClipboard(atob('${btoa(code.trim())}'))">Copy code</button>
-                        </div>
-                        <pre><code>${code.trim()}</code></pre>
-                    </div>
-                `;
-            }
-        });
-
-        botMessageContent = markdownToHTML(botMessageContent);
+        const renderedContent = renderMarkdown(botMessageContent);
         const botResponse = document.createElement("div");
         botResponse.className = "bot-response";
-        botResponse.innerHTML = `<i class="fa-solid fa-robot"></i> ${botMessageContent}`;
+        const icon = document.createElement("i");
+        icon.className = "fa-solid fa-robot";
+        const messageSpan = document.createElement("span");
+        messageSpan.className = "message-content";
+        messageSpan.appendChild(renderedContent);
+        botResponse.appendChild(icon);
+        botResponse.appendChild(messageSpan);
 
         chatFeed.appendChild(botResponse);
         chatFeed.scrollTo({
@@ -187,12 +173,41 @@ async function sendMessageToModel(isContinuation = false) {
         } else {
             updateReferences([]);
         }
+        
     } catch (error) {
         console.error('Error:', error);
-        spinner.textContent = "Error fetching response.";
+        if (spinner.parentNode) {
+            spinner.textContent = "Error fetching response.";
+        } else {
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "error-message";
+            errorDiv.textContent = "Error fetching response: " + error.message;
+            chatFeed.appendChild(errorDiv);
+        }
     } finally {
         hideThinkingIndicator();
     }
+}
+
+function showFriendlyError() {
+    const chatFeed = document.getElementById("chatFeed");
+
+    // Remove spinner if still present
+    const spinner = chatFeed.querySelector(".spinner");
+    if (spinner) {
+        chatFeed.removeChild(spinner);
+    }
+
+    hideThinkingIndicator();
+
+    const botResponse = document.createElement("div");
+    botResponse.className = "bot-response";
+    botResponse.innerHTML = `<i class="fa-solid fa-robot"></i><span class="message-content">Sorry, something went wrong. Please try again shortly.</span>`;
+    chatFeed.appendChild(botResponse);
+    chatFeed.scrollTo({
+        top: chatFeed.scrollHeight,
+        behavior: 'smooth'
+    });
 }
 
 async function fetchContext(text) {
@@ -228,84 +243,101 @@ async function fetchContext(text) {
 
 function appendMessage(role, content) {
     const chatFeed = document.getElementById("chatFeed");
-    const messageElement = document.createElement("p");
-    const iconSpan = document.createElement("span");
-    iconSpan.classList.add("icon");
+    const messageElement = document.createElement("div");
 
     if (role === "user") {
-        iconSpan.innerHTML = '<i class="fa-solid fa-user"></i>';
         messageElement.classList.add("user-message");
+        messageElement.innerHTML = `<i class="fa-solid fa-user"></i><span class="message-content">${content}</span>`;
     } else if (role === "assistant") {
-        iconSpan.innerHTML = '<i class="fa-solid fa-robot"></i>';
+        messageElement.classList.add("bot-response");
+        messageElement.innerHTML = `<i class="fa-solid fa-robot"></i><span class="message-content">${content}</span>`;
     }
 
-    messageElement.appendChild(iconSpan);
-    messageElement.innerHTML += "&nbsp;"+content;
     chatFeed.appendChild(messageElement);
     
     chatFeed.scrollTop = chatFeed.scrollHeight;
 }
 
-function markdownToHTML(text) {
-    // Update think tag handling to include a toggle button
-    text = text.replace(/<think>([\s\S]*?)<\/think>/g, 
-        '<div class="thinking-process">' +
-            '<div class="thinking-header">' +
-                '<span>💭 Thinking Process</span>' +
-                '<button class="toggle-thinking">▼</button>' +
-            '</div>' +
-            '<div class="thinking-content">$1</div>' +
-        '</div>'
-    );
+function renderMarkdown(markdown) {
+    const container = document.createElement('div');
 
-    text = text.replace(/^(\#{1,6})\s+(.*)$/gm, function(_, hashes, content) {
-        return `<h${hashes.length}>${content}</h${hashes.length}>`;
-    });
+    if (window.marked) {
+        container.innerHTML = marked.parse(markdown);
+    } else {
+        container.innerHTML = markdown.replace(/\n/g, '<br>');
+    }
 
-    // Convert bold (**text** or __text__)
-    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/__(.*?)__/g, '<strong>$1</strong>');
+    transformThinkingTags(container);
+    enhanceCodeBlocks(container);
 
-    // Convert italic (*text* or _text_)
-    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    text = text.replace(/_(.*?)_/g, '<em>$1</em>');
+    const fragment = document.createDocumentFragment();
+    while (container.firstChild) {
+        fragment.appendChild(container.firstChild);
+    }
 
-    // Convert links ([text](url))
-    text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
-
-    // Convert inline code (`code`)
-    text = text.replace(/`(.*?)`/g, '<code>$1</code>');
-
-    // Convert code blocks (```code```)
-    text = text.replace(/```([\s\S]*?)```/gm, '<pre><code>$1</code></pre>');
-
-    // Convert lists (unordered and ordered)
-    text = text.replace(/^\s*\*\s+(.*)$/gm, '<ul><li>$1</li></ul>');
-    text = text.replace(/^\s*\d+\.\s+(.*)$/gm, '<ol><li>$1</li></ol>');
-    text = text.replace(/<\/(ul|ol)>\s*<\1>/g, ''); // Fix repeated tags due to multiple lines
-
-    return text;
+    return fragment;
 }
 
+function transformThinkingTags(root) {
+    root.querySelectorAll('think').forEach((thinkEl) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'thinking-process';
 
-function containsMarkdown(text) {
-    const patterns = [
-        /\#{1,6}\s/,          // Headers
-        /\*\*.*?\*\*/s,       // Bold
-        /__.*?__/s,           // Bold
-        /\*.*?\*/s,           // Italic
-        /_.*?_/s,             // Italic
-        /\[.*?\]\(.*?\)/,     // Links
-        /^\s*[\-\*]\s/m,      // Unordered lists
-        /^\s*\d+\.\s/m,       // Ordered lists
-        /`{3}.*?`{3}/s,       // Fenced code blocks
-        /`.*?`/s              // Inline code
-    ];
+        const header = document.createElement('div');
+        header.className = 'thinking-header';
 
-    let matchCount = patterns.reduce((acc, pattern) => acc + (pattern.test(text) ? 1 : 0), 0);
+        const label = document.createElement('span');
+        label.textContent = '💭 Thinking Process';
 
-    // Check if two or more markdown features are detected
-    return matchCount >= 2;
+        const toggleButton = document.createElement('button');
+        toggleButton.className = 'toggle-thinking';
+        toggleButton.textContent = '▼';
+
+        header.appendChild(label);
+        header.appendChild(toggleButton);
+
+        const content = document.createElement('div');
+        content.className = 'thinking-content';
+
+        while (thinkEl.firstChild) {
+            content.appendChild(thinkEl.firstChild);
+        }
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(content);
+        thinkEl.replaceWith(wrapper);
+    });
+}
+
+function enhanceCodeBlocks(root) {
+    root.querySelectorAll('pre code').forEach((codeBlock) => {
+        const pre = codeBlock.parentElement;
+        const languageClass = Array.from(codeBlock.classList).find((cls) => cls.startsWith('language-'));
+        const languageLabel = languageClass ? languageClass.replace('language-', '') : null;
+        const codeText = codeBlock.textContent;
+
+        const container = document.createElement('div');
+        container.className = 'code-container';
+
+        const header = document.createElement('div');
+        header.className = 'code-header';
+
+        const title = document.createElement('span');
+        title.textContent = languageLabel ? `Language: ${languageLabel.toUpperCase()}` : 'Code';
+
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.type = 'button';
+        copyButton.textContent = 'Copy code';
+        copyButton.addEventListener('click', () => copyToClipboard(codeText));
+
+        header.appendChild(title);
+        header.appendChild(copyButton);
+
+        pre.parentNode.replaceChild(container, pre);
+        container.appendChild(header);
+        container.appendChild(pre);
+    });
 }
 
 function showThinkingIndicator() {
