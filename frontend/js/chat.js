@@ -106,6 +106,11 @@ async function sendMessageToModel(isContinuation = false) {
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Server error:', errorText);
+
+            if (response.status >= 500) {
+                showFriendlyError();
+            }
+
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -182,6 +187,27 @@ async function sendMessageToModel(isContinuation = false) {
     } finally {
         hideThinkingIndicator();
     }
+}
+
+function showFriendlyError() {
+    const chatFeed = document.getElementById("chatFeed");
+
+    // Remove spinner if still present
+    const spinner = chatFeed.querySelector(".spinner");
+    if (spinner) {
+        chatFeed.removeChild(spinner);
+    }
+
+    hideThinkingIndicator();
+
+    const botResponse = document.createElement("div");
+    botResponse.className = "bot-response";
+    botResponse.innerHTML = `<i class="fa-solid fa-robot"></i><span class="message-content">Sorry, something went wrong. Please try again shortly.</span>`;
+    chatFeed.appendChild(botResponse);
+    chatFeed.scrollTo({
+        top: chatFeed.scrollHeight,
+        behavior: 'smooth'
+    });
 }
 
 async function fetchContext(text) {
