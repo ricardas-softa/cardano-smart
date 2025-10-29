@@ -74,16 +74,20 @@ html {
 }
 
 body {
-    margin: 0;
+  margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   font-size: var(--base-font-size);
   line-height: 1.6;
-    color: var(--text-color);
+  color: var(--text-color);
+  background:
+    radial-gradient(120% 120% at 10% 0%, rgba(29, 185, 84, 0.25), transparent 55%),
+    radial-gradient(120% 120% at 90% 10%, rgba(32, 178, 170, 0.25), transparent 60%),
+    linear-gradient(180deg, #050505 0%, #0e0e0e 40%, #141414 100%);
   background-color: var(--background-color);
   min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 /* Base Typography */
 h1, h2, h3, h4, h5, h6, p {
@@ -126,29 +130,32 @@ input, button, .copy-button, .continue-button {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: var(--space-lg);
   max-width: var(--max-width);
   width: 100%;
   margin: 0 auto;
-  padding: var(--space-lg);
+  padding: clamp(1rem, 2vw, 2.5rem);
   padding-bottom: 0;
 }
 
 /* Chat Feed */
 #chatFeed {
   flex: 1;
-  background-color: var(--surface-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  background-color: rgba(26, 26, 26, 0.82);
   border-radius: var(--radius-lg);
-  padding: var(--space-lg);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
   margin-bottom: var(--space-md);
-    overflow-y: auto;
-  min-height: 300px;
+  overflow-y: auto;
+  min-height: 320px;
   color: var(--text-color);
-  
-  /* Smooth scrolling */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  
-  /* Custom scrollbar */
   scrollbar-width: thin;
   scrollbar-color: var(--surface-light) transparent;
 }
@@ -181,37 +188,42 @@ input, button, .copy-button, .continue-button {
   font-weight: 600;
 }
 /* Chat Messages */
-#chatFeed p,
 .user-message,
 .bot-response {
-  margin-bottom: var(--space-lg);
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  line-height: 1.65;
   animation: fadeIn var(--transition-base);
-  line-height: 1.6;
+  max-width: min(92%, 860px);
+  width: min(92%, 860px);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(4px);
 }
 
 .user-message {
-  background-color: rgba(29, 185, 84, 0.1);
-  padding: var(--space-md);
-  border-radius: var(--radius-md);
-  border-left: 3px solid var(--primary-color);
+  margin-left: auto;
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.25), rgba(29, 185, 84, 0.15));
+  border: 1px solid rgba(29, 185, 84, 0.25);
 }
 
 .bot-response {
-  background-color: var(--surface-light);
-  padding: var(--space-md);
-  border-radius: var(--radius-md);
-  border-left: 3px solid var(--button-bg-color);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .bot-response > i,
 .user-message > i {
-  margin-right: var(--space-sm);
+  margin-top: 0.2rem;
   color: var(--primary-color);
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
 .icon {
-  display: inline-block;
+  display: inline-flex;
   margin-right: var(--space-sm);
 }
 
@@ -284,59 +296,62 @@ code {
 }
 
 .code-container {
-    position: relative;
-    margin: var(--space-md) 0;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background-color: #1e1e1e;
-    box-shadow: var(--shadow-md);
-    width: 100%;
-    max-width: 100%;
+  position: relative;
+  margin: var(--space-md) 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: rgba(10, 10, 10, 0.75);
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  width: 100%;
+  max-width: 100%;
 }
 
 .code-header {
-    font-family: inherit;
-    background: #2d2d2d;
-    color: var(--primary-color);
-    padding: var(--space-sm) var(--space-md);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: var(--code-font-size);
-    border-bottom: 1px solid #333;
+  font-family: inherit;
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.25), rgba(29, 185, 84, 0));
+  color: var(--text-color);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--code-font-size);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .copy-button {
-    background: none;
-    border: none;
-    color: var(--primary-color);
-    cursor: pointer;
-    font-size: var(--code-font-size);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    transition: all var(--transition-base);
-    flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: var(--code-font-size);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+  flex-shrink: 0;
 }
 
 .copy-button:hover {
-    background-color: rgba(var(--primary-color-rgb), 0.1);
-    transform: none;
+  background-color: rgba(var(--primary-color-rgb), 0.15);
+  transform: translateY(-1px);
 }
 
 pre {
-    margin: 0;
-    padding: var(--space-md);
-    overflow-x: auto;
-    font-size: var(--code-font-size);
-    line-height: 1.5;
-    max-width: 100%;
+  margin: 0;
+  padding: var(--space-md);
+  overflow-x: auto;
+  font-size: var(--code-font-size);
+  line-height: 1.5;
+  max-width: 100%;
+  background: transparent;
+  color: var(--text-color);
 }
 
 pre code {
-    display: block;
-    white-space: pre;
-    word-break: normal;
-    overflow-wrap: normal;
+  display: block;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 #jsonContent {
@@ -353,6 +368,11 @@ pre code {
     animation: spin 1s ease infinite;
 }
 
+#chatFeed > .spinner {
+  align-self: center;
+  margin: var(--space-md) 0;
+}
+
 .continue-button {
     padding: 5px 10px;
     margin-top: 10px;
@@ -367,20 +387,22 @@ pre code {
 /* Removed context switch styles - context is always used */
 
 .message-content {
-    display: inline-block;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    width: calc(100% - 2rem);
-    vertical-align: top;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
 }
 
 /* Style inline code within messages */
 .message-content code {
-    background-color: rgba(29, 185, 84, 0.1);
-    padding: 0.125rem 0.375rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.9em;
-    color: var(--primary-color);
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95em;
+  color: var(--text-color);
 }
 
 /* Style for lists within messages */
@@ -413,28 +435,33 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 }
             
 .bottom-container {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: clamp(1rem, 2vw, 2rem);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 #questionForm, .show-resources, .show-json {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 .show-resources, .show-json {
-    margin: 0;
-    padding: 5px 10px;
-    cursor: pointer;
-    user-select: none;
+  margin: 0;
+  padding: 5px 10px;
+  cursor: pointer;
+  user-select: none;
 }
 
 /* Options Container */
 .options-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  margin-top: var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-sm);
   gap: var(--space-md);
   flex-wrap: wrap;
 }
@@ -448,48 +475,51 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 
 /* Style for the Sources button */
 .show-sources, .references-button {
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: var(--space-sm) var(--space-lg);
-    font-size: var(--base-font-size);
-    font-weight: 500;
-    border-radius: var(--radius-full);
-    transition: all var(--transition-base);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+  color: var(--background-color);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--base-font-size);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  box-shadow: 0 12px 24px rgba(var(--primary-color-rgb), 0.35);
 }
 
 .show-sources:hover, .references-button:hover {
-    background-color: var(--primary-color-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+  filter: brightness(0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(var(--primary-color-rgb), 0.4);
 }
 
 /* Submit Button */
 #questionForm button[type="submit"] {
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    border: none;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+  color: var(--background-color);
+  border: none;
   padding: 0;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all var(--transition-base);
   flex-shrink: 0;
+  box-shadow: 0 12px 24px rgba(var(--primary-color-rgb), 0.3);
 }
 
 #questionForm button[type="submit"]:hover {
-  background-color: var(--primary-color-dark);
-  transform: scale(1.1);
+  transform: scale(1.05);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 28px rgba(var(--primary-color-rgb), 0.4);
 }
 
 #questionForm button[type="submit"]:active {
@@ -502,7 +532,6 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 
 /* Bottom Container */
 .bottom-container {
-  padding: var(--space-lg);
   padding-top: 0;
   max-width: var(--max-width);
   width: 100%;
@@ -511,14 +540,14 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 
 /* Question Form */
 #questionForm {
-    display: flex;
+  display: flex;
   gap: var(--space-sm);
-    align-items: center;
-  background-color: var(--surface-color);
-  padding: var(--space-xs);
+  align-items: center;
+  background: rgba(18, 18, 18, 0.9);
+  padding: var(--space-xs) var(--space-xs);
   border-radius: var(--radius-full);
-  border: 1px solid var(--surface-light);
-  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
   transition: all var(--transition-base);
 }
 
@@ -536,40 +565,47 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(26, 26, 26, 0.95);
+  background: rgba(12, 12, 12, 0.85);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--surface-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
   min-height: var(--header-height);
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .header-content {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 clamp(1.25rem, 2vw, 2.5rem);
   height: var(--header-height);
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
   gap: var(--space-md);
 }
 
 .logo {
   width: 40px;
-    height: 40px;
+  height: 40px;
   flex-shrink: 0;
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 16px rgba(29, 185, 84, 0.25);
 }
 
 .header h1 {
-    color: var(--primary-color);
-    font-size: 1.5rem;
-    margin: 0;
-    white-space: nowrap;
+  background: linear-gradient(120deg, #ffffff 0%, rgba(255, 255, 255, 0.65) 40%, var(--primary-color) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.45rem;
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
 #version-display {
-    margin-left: auto;
+  margin-left: auto;
   font-size: var(--code-font-size);
-    color: var(--text-color-grey);
+  color: var(--text-color-grey);
   opacity: 0.7;
 }
 
@@ -596,30 +632,28 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
   }
 }
 
-/* Mobile - Completely different layout */
+/* Mobile */
 @media screen and (max-width: 768px) {
   :root {
-    --header-height: 70px;
-    --base-font-size: 18px; /* Much larger base font */
-    --code-font-size: 16px;
-    /* Much bigger spacing for mobile */
-    --space-xs: 0.5rem;
-    --space-sm: 1rem;
-    --space-md: 1.5rem;
-    --space-lg: 2rem;
-    --space-xl: 2.5rem;
+    --header-height: 64px;
+    --base-font-size: 16px;
+    --code-font-size: 14px;
+    --space-xs: 0.4rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.25rem;
+    --space-xl: 1.75rem;
   }
-  
-  /* Fix for mobile viewport */
+
   body {
     min-height: 100vh;
     min-height: -webkit-fill-available;
   }
-  
+
   html {
     height: -webkit-fill-available;
   }
-  
+
   .header {
     position: fixed;
     top: 0;
@@ -628,142 +662,135 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     z-index: 100;
     padding: var(--space-sm) var(--space-md);
   }
-  
+
+  .header-content {
+    padding: 0;
+  }
+
   .header h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.3rem;
   }
-  
+
   .logo {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
   }
-  
+
   #version-display {
-    display: none; /* Hide on mobile to save space */
+    display: none;
   }
-  
+
   .main-wrapper {
     padding: 0;
-    padding-top: calc(var(--header-height) + var(--space-sm));
-    padding-bottom: 180px; /* Space for fixed bottom container */
+    padding-top: calc(var(--header-height) + var(--space-md));
+    padding-bottom: 170px;
     height: 100vh;
     height: -webkit-fill-available;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    gap: var(--space-md);
   }
-  
+
   #chatFeed {
+    margin: 0 var(--space-sm);
     padding: var(--space-md);
-    margin: var(--space-sm);
-    margin-bottom: var(--space-md);
     border-radius: var(--radius-lg);
-    font-size: 18px;
-    line-height: 1.7;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    font-size: 1rem;
+    line-height: 1.6;
   }
-  
-  /* Much larger messages */
+
   .user-message,
-  .bot-response {
-    padding: var(--space-lg) var(--space-xl);
-    margin-bottom: var(--space-xl);
-    font-size: 18px;
-    line-height: 1.8;
-    border-radius: var(--radius-lg);
+  .bot-response,
+  #chatFeed p {
+    font-size: 1rem;
+    padding: var(--space-md) var(--space-lg);
+    width: 100%;
+    max-width: 100%;
   }
-  
+
   .user-message > i,
   .bot-response > i {
-    font-size: 1.25rem;
-    margin-right: var(--space-md);
+    font-size: 1.15rem;
+    margin-right: var(--space-sm);
   }
-  
-  /* Bigger code blocks */
+
   .code-container {
-    margin: var(--space-lg) 0;
+    margin: var(--space-md) 0;
   }
-  
+
   .code-header {
-    padding: var(--space-md) var(--space-lg);
-    font-size: 16px;
+    padding: var(--space-sm) var(--space-md);
   }
-  
+
   .copy-button {
-    padding: var(--space-sm) var(--space-lg);
-    font-size: 16px;
-    min-width: 100px;
-    min-height: 44px;
-    font-weight: 600;
+    min-height: 40px;
   }
-  
+
   pre {
-    font-size: 15px;
-    padding: var(--space-lg);
+    padding: var(--space-md);
+    font-size: var(--code-font-size);
   }
-  
-  /* Fix Safari bottom bar issue */
+
   .bottom-container {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--background-color);
-    border-top: 1px solid var(--surface-light);
+    border-radius: 0;
+    border: none;
+    background: transparent;
     padding: var(--space-md);
     padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
-    z-index: 90;
-  }
-  
-  /* Much larger input area */
-  #questionForm {
-    background-color: var(--surface-color);
-    border: 2px solid var(--surface-light);
-    padding: var(--space-sm);
+    box-shadow: none;
     gap: var(--space-md);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   }
-  
+
+  #questionForm {
+    border-radius: var(--radius-lg);
+    padding: var(--space-xs) var(--space-sm);
+    gap: var(--space-sm);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: none;
+  }
+
   #questionInput {
-    font-size: 18px;
-    padding: var(--space-md) var(--space-lg);
-    min-height: 56px;
-    background-color: transparent;
+    font-size: 1rem;
+    padding: var(--space-sm) var(--space-md);
+    min-height: 52px;
   }
-  
+
   #questionForm button[type="submit"] {
-    width: 56px;
-    height: 56px;
-    font-size: 1.5rem;
+    width: 52px;
+    height: 52px;
+    font-size: 1.35rem;
   }
-  
+
   #questionForm button[type="submit"] i {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
-  
-  /* Massive buttons for easy tapping */
+
   .show-sources,
   .references-button {
-    padding: var(--space-lg) var(--space-xl);
-    font-size: 18px;
-    font-weight: 600;
-    min-height: 56px;
     width: 100%;
     justify-content: center;
+    padding: var(--space-md);
+    min-height: 52px;
     border-radius: var(--radius-lg);
   }
-  
+
   .options-container {
-    gap: var(--space-md);
-        flex-direction: column;
-    margin-top: var(--space-md);
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+    margin-top: 0;
   }
-  
+
   .left-options,
   .right-options {
     width: 100%;
   }
-  
-  /* Better popup for mobile */
+
   .popup-content {
     position: fixed;
     top: var(--space-md);
@@ -774,141 +801,131 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     max-width: none;
     max-height: none;
     transform: none;
-    padding: var(--space-xl);
+    padding: var(--space-lg);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-lg);
   }
-  
-  /* Larger close button */
+
   .close-button {
-    width: 50px;
-    height: 50px;
-    font-size: 2rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1.75rem;
     top: var(--space-md);
     right: var(--space-md);
   }
-  
-  /* Better thinking indicator */
+
   .thinking-indicator {
     top: calc(var(--header-height) + var(--space-md));
-    padding: var(--space-md) var(--space-xl);
-    font-size: 18px;
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 1rem;
   }
-  
-  /* Improve list items in messages */
+
   .message-content ul,
   .message-content ol {
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding-left: 1.25rem;
   }
-  
+
   .message-content code {
-    font-size: 16px;
-    padding: 0.25rem 0.5rem;
+    font-size: 0.95rem;
+    padding: 0.2rem 0.45rem;
   }
 }
 
 /* Small Mobile (max-width: 480px) */
 @media (max-width: 480px) {
   :root {
-    /* Even larger for small screens */
-    --base-font-size: 20px;
-    --code-font-size: 16px;
-    --header-height: 65px;
-    --space-md: 1.75rem;
-    --space-lg: 2.25rem;
+    --base-font-size: 15px;
+    --code-font-size: 13px;
+    --header-height: 62px;
+    --space-md: 1.2rem;
+    --space-lg: 1.6rem;
   }
-  
+
   .header h1 {
-    font-size: 1.375rem;
+    font-size: 1.2rem;
   }
-  
+
   .header h1 i {
     display: none;
-    }
+  }
 
-    .logo {
-    width: 40px;
-    height: 40px;
+  .logo {
+    width: 36px;
+    height: 36px;
   }
-  
-  /* Full-width chat area with minimal padding */
+
   .main-wrapper {
-    padding-bottom: 200px; /* More space for larger bottom container */
+    padding-bottom: 190px;
   }
-  
+
   #chatFeed {
     margin: var(--space-xs);
     padding: var(--space-md);
-    font-size: 20px;
+    font-size: 0.95rem;
   }
-  
-  /* Even bigger messages */
+
   .user-message,
   .bot-response {
-    font-size: 20px;
-    line-height: 1.9;
-    padding: var(--space-xl);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: var(--space-md);
   }
-  
-  /* Adjust code blocks */
+
   pre {
-    font-size: 15px;
+    font-size: var(--code-font-size);
   }
-  
-  /* Larger bottom container */
+
   .bottom-container {
     padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
   }
-  
-  /* Even bigger input */
+
   #questionInput {
-    font-size: 20px;
-    min-height: 60px;
+    font-size: 0.95rem;
+    min-height: 54px;
   }
-  
+
   #questionForm button[type="submit"] {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
   }
-  
-  /* Huge buttons for small screens */
+
   .show-sources,
   .references-button {
-    min-height: 60px;
-    font-size: 20px;
-    padding: var(--space-lg) var(--space-xl);
+    min-height: 54px;
+    font-size: 0.95rem;
+    padding: var(--space-md);
   }
-  
-  /* Better source list items */
+
   #sourceList li,
   #popupSourceList li {
-    padding: var(--space-xl);
-    font-size: 18px;
+    padding: var(--space-lg);
+    font-size: 0.95rem;
   }
-  
+
   .source-content {
-    font-size: 17px;
-    line-height: 1.7;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
-  
+
   .source-link {
-    padding: var(--space-md) var(--space-xl);
-    font-size: 17px;
-    min-height: 50px;
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 0.95rem;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
-  /* Bigger inline code and lists */
+
   .message-content code {
-    font-size: 18px;
+    font-size: 0.95rem;
   }
-  
+
   .message-content ul,
   .message-content ol {
-    font-size: 20px;
+    font-size: 0.95rem;
   }
 }
 
@@ -982,13 +999,6 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 }
 
 /* ... rest of the styles ... */
-
-.header h1 {
-    color: var(--primary-color); /* This should already be set to your green color */
-    font-size: 1.5rem;
-    margin: 0;
-    white-space: nowrap;
-}
 
 /* ... rest of the styles ... */
 
