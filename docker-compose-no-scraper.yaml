@@ -2,14 +2,10 @@ version: "3.8"
 services:
   ollama-service:
     image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    pull_policy: always
     volumes:
       - ./models:/root/.ollama
-    pull_policy: always
-    ports:
-      - "11434:11434"
-    runtime: nvidia
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
     devices:
       - "nvidia.com/gpu=all"
     networks:
