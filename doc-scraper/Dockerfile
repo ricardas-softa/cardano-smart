@@ -2,11 +2,24 @@ FROM selenium/standalone-chrome:latest
 
 USER root
 
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    python3-pip \
+    python3.11 \
+    python3.11-dev \
+    python3.11-venv \
+    python3.11-distutils \
+    build-essential \
+    libxml2-dev \
+    libxslt1-dev \
+    zlib1g-dev \
+    libffi-dev \
+    pkg-config \
+ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-RUN python3 -m venv /app/venv
+RUN python3.11 -m venv /app/venv
 
 COPY documentation_scraper/requirements.txt /app/
 RUN . /app/venv/bin/activate && pip install --no-cache-dir -r requirements.txt
