@@ -22,7 +22,7 @@ services:
     build:
       context: ./doc-scraper
       dockerfile: Dockerfile
-    user: "1000:1000"
+    user: "0:0"
     volumes:
       - ./shared-data:/app/data
     environment:

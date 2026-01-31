@@ -23,6 +23,10 @@ cp local_configs/entrypoint.sh private-gpt/entrypoint.sh
 cp local_configs/ingest.sh private-gpt/ingest.sh
 cp local_configs/prepare_ingest.sh private-gpt/prepare_ingest.sh
 cp local_configs/diff_report.py private-gpt/diff_report.py
+cp local_configs/private_gpt_patches/private_gpt/server/ingest/ingest_service.py \
+  private-gpt/private_gpt/server/ingest/ingest_service.py
+cp local_configs/private_gpt_patches/scripts/ingest_folder.py \
+  private-gpt/scripts/ingest_folder.py
 
 # Set executable permissions
 chmod +x private-gpt/entrypoint.sh

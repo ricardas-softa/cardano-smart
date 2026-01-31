@@ -69,8 +69,8 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent horizontal scroll on mobile */
-  overflow-x: hidden;
+  /* Prevent page scroll; only chat container should scroll */
+  overflow: hidden;
 }
 
 body {
@@ -86,8 +86,10 @@ body {
     linear-gradient(180deg, #050505 0%, #0e0e0e 40%, #141414 100%);
   background-color: var(--background-color);
   min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 /* Base Typography */
 h1, h2, h3, h4, h5, h6, p {
@@ -136,6 +138,7 @@ input, button, .copy-button, .continue-button {
   margin: 0 auto;
   padding: clamp(1rem, 2vw, 2.5rem);
   padding-bottom: 0;
+  min-height: 0;
 }
 
 /* Chat Feed */
@@ -686,8 +689,7 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     padding-bottom: 170px;
     height: 100vh;
     height: -webkit-fill-available;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     gap: var(--space-md);
   }
 

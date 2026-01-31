@@ -1,15 +1,14 @@
 import os
 import re
+import unicodedata
 
 class TextFileWriterPipeline:
 
     def open_spider(self, spider):
-        self.base_folder = 'data'
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.base_folder = os.environ.get('OUTPUT_PATH', 'data')
+        os.makedirs(self.base_folder, exist_ok=True)
         self.spider_folder = os.path.join(self.base_folder, spider.name)
-        if not os.path.exists(self.spider_folder):
-            os.makedirs(self.spider_folder)
+        os.makedirs(self.spider_folder, exist_ok=True)
         self.file_counter = 1
 
     def process_item(self, item, spider):
@@ -35,7 +34,13 @@ class TextFileWriterPipeline:
 
     @staticmethod
     def sanitize_filename(title):
-        safe_title = re.sub(r'[<>:"/\\|?*]', '', title)
-        safe_title = safe_title.replace(' ', '_')
-        safe_title = safe_title.strip()
-        return safe_title[:100]
+        if not title:
+            return ''
+
+        normalized = unicodedata.normalize('NFKD', title)
+        ascii_title = normalized.encode('ascii', 'ignore').decode('ascii')
+        safe_title = re.sub(r'\s+', '_', ascii_title)
+        safe_title = re.sub(r'[^A-Za-z0-9_-]', '', safe_title)
+        safe_title = re.sub(r'_+', '_', safe_title)
+        safe_title = safe_title.strip('_-')
+        return safe_title[:80]

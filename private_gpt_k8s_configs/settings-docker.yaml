@@ -3,7 +3,7 @@ server:
 
 llm:
   mode: ollama
-  max_new_tokens: 1024
+  max_new_tokens: 2048
   context_window: 32000
   temperature: 0.1     #The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
 
