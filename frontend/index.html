@@ -52,6 +52,14 @@
                 </button>
             </div>
             <div class="right-options">
+                <a class="discord-link" href="https://discord.gg/KvJMEFhGjx" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-discord"></i>
+                    <span>Discord</span>
+                </a>
+                <button class="feedback-button">
+                    <i class="fa-regular fa-message"></i>
+                    <span>Feedback</span>
+                </button>
                 <button class="show-sources" onclick="window.open('sources.html', '_blank')">Sources</button>
             </div>
         </div>
@@ -62,6 +70,8 @@
     </div>
     <script src="/js/chat.js"></script>
     <script src="/js/version.js"></script>
+    <script src="/js/feedback_config.js"></script>
+    <script src="/js/feedback.js"></script>
     <div id="referencesPopup" class="popup">
         <div class="popup-content">
             <h2>References</h2>
@@ -69,5 +79,69 @@
             <button id="closeReferences" class="close-button">&times;</button>
         </div>
     </div>
+    <div id="feedbackPopup" class="popup">
+        <div class="popup-content feedback-content">
+            <h2>Send Feedback</h2>
+            <form id="feedbackForm">
+                <div class="feedback-section">
+                    <h3>Cardano Smart Use</h3>
+                    <div class="feedback-grid">
+                        <div class="feedback-field">
+                            <label for="csmart_use_feedback_type">Feedback Type</label>
+                            <select id="csmart_use_feedback_type" name="csmart_use_feedback_type">
+                                <option value="">Select type</option>
+                                <option value="Comments" selected>Comments</option>
+                                <option value="Questions">Questions</option>
+                                <option value="Bug Reports">Bug Reports</option>
+                                <option value="Feature Request">Feature Request</option>
+                            </select>
+                        </div>
+                        <div class="feedback-field">
+                            <label for="csmart_use_feedback">Feedback</label>
+                            <textarea id="csmart_use_feedback" rows="3" placeholder="Share your feedback"></textarea>
+                        </div>
+                        <div class="feedback-field">
+                            <label for="csmart_use_suggestions">Suggestions for improvement</label>
+                            <textarea id="csmart_use_suggestions" rows="3" placeholder="What would you improve?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <h3>Bot Installation</h3>
+                    <div class="feedback-grid">
+                        <div class="feedback-field">
+                            <label for="bot_installation_feedback_type">Feedback Type</label>
+                            <select id="bot_installation_feedback_type" name="bot_installation_feedback_type">
+                                <option value="">Select type</option>
+                                <option value="Comments" selected>Comments</option>
+                                <option value="Questions">Questions</option>
+                                <option value="Bug Reports">Bug Reports</option>
+                                <option value="Feature Request">Feature Request</option>
+                                <option value="Problems">Problems</option>
+                            </select>
+                        </div>
+                        <div class="feedback-field">
+                            <label for="bot_installation_feedback">Feedback</label>
+                            <textarea id="bot_installation_feedback" rows="3" placeholder="Share installation feedback"></textarea>
+                        </div>
+                        <div class="feedback-field">
+                            <label for="bot_installation_suggestions">Suggestions for improvement</label>
+                            <textarea id="bot_installation_suggestions" rows="3" placeholder="What would you improve?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-actions">
+                    <button type="submit" class="feedback-submit">Send</button>
+                    <button type="button" class="feedback-cancel">Cancel</button>
+                </div>
+                <div id="feedbackStatus" class="feedback-status" role="status" aria-live="polite"></div>
+                <p class="feedback-note">Submits to Google Forms. No account required.</p>
+            </form>
+            <button id="closeFeedback" class="close-button">&times;</button>
+        </div>
+    </div>
+    <iframe id="feedbackSubmitFrame" name="feedbackSubmitFrame" title="feedback-submission" style="display:none"></iframe>
 </body>
 </html>
