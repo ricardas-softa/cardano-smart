@@ -643,23 +643,25 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 /* Mobile */
 @media screen and (max-width: 768px) {
   :root {
-    --header-height: 64px;
-    --base-font-size: 16px;
-    --code-font-size: 14px;
-    --space-xs: 0.4rem;
-    --space-sm: 0.75rem;
-    --space-md: 1rem;
-    --space-lg: 1.25rem;
-    --space-xl: 1.75rem;
-  }
-
-  body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    --header-height: 52px;
+    --base-font-size: 15px;
+    --code-font-size: 13px;
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 0.75rem;
+    --space-lg: 1rem;
   }
 
   html {
-    height: -webkit-fill-available;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  body {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .header {
@@ -668,20 +670,24 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     left: 0;
     right: 0;
     z-index: 100;
-    padding: var(--space-sm) var(--space-md);
+    min-height: var(--header-height);
+    padding: 0 var(--space-md);
+    padding-top: env(safe-area-inset-top, 0px);
   }
 
   .header-content {
+    height: var(--header-height);
     padding: 0;
+    gap: var(--space-sm);
   }
 
   .header h1 {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
   }
 
   .logo {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
   }
 
   #version-display {
@@ -690,52 +696,54 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 
   .main-wrapper {
     padding: 0;
-    padding-top: calc(var(--header-height) + var(--space-md));
-    padding-bottom: 170px;
+    padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px) + var(--space-sm));
+    padding-bottom: 110px;
     height: 100vh;
-    height: -webkit-fill-available;
+    height: 100dvh;
     overflow: hidden;
-    gap: var(--space-md);
+    gap: 0;
   }
 
   #chatFeed {
     margin: 0 var(--space-sm);
     padding: var(--space-md);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
-    font-size: 1rem;
-    line-height: 1.6;
+    border-radius: var(--radius-md);
+    font-size: var(--base-font-size);
+    line-height: 1.55;
+    min-height: 0;
   }
 
   .user-message,
   .bot-response,
   #chatFeed p {
-    font-size: 1rem;
-    padding: var(--space-md) var(--space-lg);
+    font-size: var(--base-font-size);
+    padding: var(--space-sm) var(--space-md);
     width: 100%;
     max-width: 100%;
   }
 
   .user-message > i,
   .bot-response > i {
-    font-size: 1.15rem;
-    margin-right: var(--space-sm);
+    font-size: 0.9rem;
+    margin-right: var(--space-xs);
   }
 
   .code-container {
-    margin: var(--space-md) 0;
+    margin: var(--space-sm) 0;
   }
 
   .code-header {
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
   }
 
   .copy-button {
-    min-height: 40px;
+    min-height: 36px;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--code-font-size);
   }
 
   pre {
-    padding: var(--space-md);
+    padding: var(--space-sm);
     font-size: var(--code-font-size);
   }
 
@@ -744,127 +752,142 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     bottom: 0;
     left: 0;
     right: 0;
-    border-radius: 0;
-    border: none;
-    background: transparent;
-    padding: var(--space-md);
-    padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
-    box-shadow: none;
-    gap: var(--space-md);
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: var(--space-sm) var(--space-md);
+    padding-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom, 0px));
+    gap: var(--space-xs);
   }
 
   #questionForm {
-    border-radius: var(--radius-lg);
-    padding: var(--space-xs) var(--space-sm);
-    gap: var(--space-sm);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-full);
+    padding: 2px 2px 2px var(--space-sm);
+    gap: var(--space-xs);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: none;
   }
 
   #questionInput {
-    font-size: 1rem;
-    padding: var(--space-sm) var(--space-md);
-    min-height: 52px;
+    font-size: var(--base-font-size);
+    padding: var(--space-sm);
+    min-height: 40px;
   }
 
   #questionForm button[type="submit"] {
-    width: 52px;
-    height: 52px;
-    font-size: 1.35rem;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
   }
 
   #questionForm button[type="submit"] i {
-    font-size: 1.35rem;
+    font-size: 0.9rem;
+  }
+
+  .options-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-top: 0;
+    flex-wrap: nowrap;
+  }
+
+  .left-options,
+  .right-options {
+    width: auto;
+    gap: var(--space-xs);
   }
 
   .show-sources,
   .references-button,
   .feedback-button,
   .discord-link {
-    width: 100%;
-    justify-content: center;
-    padding: var(--space-md);
-    min-height: 52px;
-    border-radius: var(--radius-lg);
+    width: auto;
+    min-height: 0;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    gap: 4px;
+    box-shadow: none;
   }
 
-  .options-container {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-sm);
-    margin-top: 0;
+  .references-button span,
+  .feedback-button span,
+  .discord-link span {
+    display: none;
   }
 
-  .left-options,
-  .right-options {
-    width: 100%;
+  .show-sources {
+    font-size: 0.7rem;
+    padding: 5px 8px;
   }
 
   .popup-content {
     position: fixed;
     top: var(--space-md);
-    left: var(--space-md);
-    right: var(--space-md);
+    left: var(--space-sm);
+    right: var(--space-sm);
     bottom: auto;
     width: auto;
     max-width: none;
-    max-height: calc(100vh - 2 * var(--space-md));
+    max-height: calc(100dvh - 2 * var(--space-md));
     transform: none;
-    padding: var(--space-lg);
+    padding: var(--space-md);
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--space-sm);
     overflow: hidden;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
   }
 
   #popupSourceList {
     grid-template-columns: 1fr;
-    max-height: calc(100vh - 2 * var(--space-md) - 5.5rem);
+    max-height: calc(100dvh - 2 * var(--space-md) - 5rem);
     padding-right: 0;
     flex: 1;
     -webkit-overflow-scrolling: touch;
   }
 
   .close-button {
-    width: 44px;
-    height: 44px;
-    font-size: 1.75rem;
-    top: var(--space-md);
-    right: var(--space-md);
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    top: var(--space-sm);
+    right: var(--space-sm);
   }
 
   .thinking-indicator {
-    top: calc(var(--header-height) + var(--space-md));
-    padding: var(--space-sm) var(--space-lg);
-    font-size: 1rem;
+    top: calc(var(--header-height) + env(safe-area-inset-top, 0px) + var(--space-sm));
+    padding: var(--space-xs) var(--space-md);
+    font-size: 0.85rem;
   }
 
   .message-content ul,
   .message-content ol {
-    font-size: 1rem;
-    line-height: 1.6;
-    padding-left: 1.25rem;
+    font-size: var(--base-font-size);
+    line-height: 1.55;
+    padding-left: 1.1rem;
   }
 
   .message-content code {
-    font-size: 0.95rem;
-    padding: 0.2rem 0.45rem;
+    font-size: 0.85rem;
+    padding: 0.15rem 0.35rem;
   }
 }
 
 /* Small Mobile (max-width: 480px) */
 @media (max-width: 480px) {
   :root {
-    --base-font-size: 15px;
-    --code-font-size: 13px;
-    --header-height: 62px;
-    --space-md: 1.2rem;
-    --space-lg: 1.6rem;
+    --base-font-size: 14px;
+    --code-font-size: 12px;
+    --header-height: 48px;
   }
 
   .header h1 {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
   }
 
   .header h1 i {
@@ -872,25 +895,25 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
   }
 
   .logo {
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
   }
 
   .main-wrapper {
-    padding-bottom: 190px;
+    padding-bottom: 100px;
   }
 
   #chatFeed {
-    margin: var(--space-xs);
-    padding: var(--space-md);
-    font-size: 0.95rem;
+    margin: 0 var(--space-xs);
+    padding: var(--space-sm);
+    font-size: var(--base-font-size);
   }
 
   .user-message,
   .bot-response {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    padding: var(--space-md);
+    font-size: var(--base-font-size);
+    line-height: 1.5;
+    padding: var(--space-sm);
   }
 
   pre {
@@ -898,54 +921,26 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
   }
 
   .bottom-container {
-    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
+    padding: var(--space-xs) var(--space-sm);
+    padding-bottom: calc(var(--space-xs) + env(safe-area-inset-bottom, 0px));
   }
 
   #questionInput {
-    font-size: 0.95rem;
-    min-height: 54px;
+    font-size: var(--base-font-size);
+    min-height: 36px;
   }
 
   #questionForm button[type="submit"] {
-    width: 50px;
-    height: 50px;
+    width: 36px;
+    height: 36px;
   }
 
   .show-sources,
   .references-button,
   .feedback-button,
   .discord-link {
-    min-height: 54px;
-    font-size: 0.95rem;
-    padding: var(--space-md);
-  }
-
-  #sourceList li {
-    padding: var(--space-lg);
-    font-size: 0.95rem;
-  }
-
-  .source-content {
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-
-  .source-link {
-    padding: var(--space-sm) var(--space-lg);
-    font-size: 0.95rem;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .message-content code {
-    font-size: 0.95rem;
-  }
-
-  .message-content ul,
-  .message-content ol {
-    font-size: 0.95rem;
+    padding: 4px 8px;
+    font-size: 0.7rem;
   }
 }
 
@@ -1059,10 +1054,6 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 @supports (padding: max(0px)) {
   .header {
     padding-top: max(var(--space-md), env(safe-area-inset-top));
-  }
-  
-  .bottom-container {
-    padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
   }
 }
 
@@ -1571,226 +1562,3 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     transform: translateY(-1px);
 }
 
-/* ==========================================================================
-   EXTREME MOBILE OVERHAUL - UNMISSABLE CHANGES
-   ========================================================================== */
-@media only screen and (max-width: 768px) {
-  /* Force override all mobile styles with !important */
-  
-  /* Change the entire color scheme on mobile */
-  body {
-    background: #000000 !important;
-  }
-  
-  /* Fixed header with dramatic styling */
-  .header {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 9999 !important;
-    background: linear-gradient(90deg, #1DB954 0%, #169c46 100%) !important;
-    height: 90px !important;
-    padding: 20px !important;
-    box-shadow: 0 5px 30px rgba(29, 185, 84, 0.5) !important;
-  }
-  
-  .header h1 {
-    font-size: 2rem !important;
-    color: #000000 !important;
-    font-weight: 900 !important;
-  }
-  
-  .header h1 i {
-    display: none !important;
-  }
-  
-  .logo {
-    width: 60px !important;
-    height: 60px !important;
-    filter: brightness(0) !important;
-  }
-  
-  /* Main wrapper with massive padding */
-  .main-wrapper {
-    padding-top: 110px !important;
-    padding-bottom: 250px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  
-  /* Chat area with no background */
-  #chatFeed {
-    background: transparent !important;
-    padding: 5px !important;
-    margin: 0 !important;
-    border: none !important;
-    font-size: 20px !important;
-  }
-  
-  /* Massive chat bubbles */
-  .user-message,
-  .bot-response {
-    margin: 15px 10px 25px 10px !important;
-    padding: 25px 30px !important;
-    font-size: 20px !important;
-    line-height: 2 !important;
-    border-radius: 25px !important;
-    font-weight: 400 !important;
-  }
-  
-  .user-message {
-    background: #1DB954 !important;
-    color: #000000 !important;
-    margin-left: 50px !important;
-    margin-right: 10px !important;
-    border: none !important;
-    box-shadow: 0 5px 20px rgba(29, 185, 84, 0.4) !important;
-  }
-  
-  .bot-response {
-    background: #1a1a1a !important;
-    color: #ffffff !important;
-    margin-right: 50px !important;
-    margin-left: 10px !important;
-    border: 2px solid #333 !important;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5) !important;
-  }
-  
-  /* Huge icons */
-  .user-message > i {
-    color: #000000 !important;
-    font-size: 2rem !important;
-    margin-right: 20px !important;
-  }
-  
-  .bot-response > i {
-    color: #1DB954 !important;
-    font-size: 2rem !important;
-    margin-right: 20px !important;
-  }
-  
-  /* Fixed bottom with dramatic styling */
-  .bottom-container {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    background: #1a1a1a !important;
-    border-top: 3px solid #1DB954 !important;
-    padding: 20px 15px !important;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 25px)) !important;
-    z-index: 9999 !important;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8) !important;
-  }
-  
-  /* Huge input field */
-  #questionForm {
-    background: #000000 !important;
-    border: 3px solid #1DB954 !important;
-    border-radius: 35px !important;
-    padding: 10px !important;
-    margin-bottom: 20px !important;
-  }
-  
-  #questionInput {
-    font-size: 22px !important;
-    padding: 20px 25px !important;
-    height: 70px !important;
-    color: #ffffff !important;
-    background: transparent !important;
-  }
-  
-  #questionInput::placeholder {
-    color: #666 !important;
-    font-size: 20px !important;
-  }
-  
-  /* Massive send button */
-  #questionForm button[type="submit"] {
-    width: 70px !important;
-    height: 70px !important;
-    background: #1DB954 !important;
-    border: none !important;
-    border-radius: 35px !important;
-  }
-  
-  #questionForm button[type="submit"] i {
-    font-size: 2rem !important;
-    color: #000000 !important;
-  }
-  
-  /* Giant action buttons */
-  .options-container {
-    gap: 15px !important;
-    margin-top: 0 !important;
-  }
-  
-  .show-sources,
-  .references-button {
-    width: 100% !important;
-    height: 65px !important;
-    font-size: 20px !important;
-    font-weight: 900 !important;
-    background: #1DB954 !important;
-    color: #000000 !important;
-    border: none !important;
-    border-radius: 30px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    padding: 0 30px !important;
-  }
-  
-  /* Code blocks with contrast */
-  .code-container {
-    margin: 25px -15px !important;
-    border-radius: 20px !important;
-    border: 2px solid #1DB954 !important;
-  }
-  
-  .code-header {
-    padding: 20px !important;
-    font-size: 18px !important;
-    background: #0a0a0a !important;
-    color: #1DB954 !important;
-  }
-  
-  .copy-button {
-    height: 45px !important;
-    padding: 10px 25px !important;
-    font-size: 18px !important;
-    background: #1DB954 !important;
-    color: #000000 !important;
-    border-radius: 22px !important;
-    font-weight: 700 !important;
-  }
-  
-  pre {
-    font-size: 17px !important;
-    padding: 25px !important;
-    background: #000000 !important;
-  }
-  
-  /* Message content adjustments */
-  .message-content {
-    width: 100% !important;
-  }
-  
-  .message-content code {
-    font-size: 18px !important;
-    background: rgba(29, 185, 84, 0.3) !important;
-    color: #ffffff !important;
-    padding: 5px 10px !important;
-    border-radius: 8px !important;
-  }
-  
-  /* Force hide scrollbars */
-  * {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-  
-  *::-webkit-scrollbar {
-    display: none !important;
-  }
-}
