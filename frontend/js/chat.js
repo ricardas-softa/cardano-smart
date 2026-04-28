@@ -32,6 +32,55 @@ document.addEventListener('DOMContentLoaded', () => {
             referencesPopup.style.display = 'none';
         }
     });
+
+    // Bottom sheet toggle
+    const sheetTrigger = document.querySelector('.bottom-sheet-trigger');
+    const sheet = document.getElementById('bottomSheet');
+    const sheetBackdrop = document.getElementById('bottomSheetBackdrop');
+
+    function openBottomSheet() {
+        sheetBackdrop.classList.add('active');
+        sheet.classList.add('open');
+    }
+
+    function closeBottomSheet() {
+        sheet.classList.remove('open');
+        sheetBackdrop.classList.remove('active');
+    }
+
+    if (sheetTrigger && sheet && sheetBackdrop) {
+        sheetTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            openBottomSheet();
+        });
+
+        sheetBackdrop.addEventListener('click', closeBottomSheet);
+
+        sheet.addEventListener('click', (e) => {
+            const btn = e.target.closest('.bottom-sheet-btn');
+            if (!btn) return;
+            const action = btn.dataset.action;
+
+            if (action === 'references') {
+                closeBottomSheet();
+                referencesButton.click();
+            } else if (action === 'feedback') {
+                closeBottomSheet();
+                document.querySelector('.feedback-button').click();
+            } else if (action === 'sources') {
+                closeBottomSheet();
+                window.open('sources.html', '_blank');
+            } else if (action === 'discord') {
+                closeBottomSheet();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sheet.classList.contains('open')) {
+                closeBottomSheet();
+            }
+        });
+    }
 });
 
 

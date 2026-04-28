@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardano Smart</title>
 
-    <link rel="stylesheet" href="/css/styles.css?v=3.0">
+    <link rel="stylesheet" href="/css/styles.css?v=3.2">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -39,6 +39,9 @@
     </div>
     <div class="bottom-container">
         <form id="questionForm">
+            <button type="button" class="bottom-sheet-trigger" aria-label="Open actions menu">
+                <i class="fas fa-bars"></i>
+            </button>
             <input type="text" id="questionInput" placeholder="Type your message here">
             <button type="submit" aria-label="Send message">
                 <i class="fas fa-paper-plane"></i>
@@ -62,6 +65,28 @@
                 </button>
                 <button class="show-sources" onclick="window.open('sources.html', '_blank')">Sources</button>
             </div>
+        </div>
+    </div>
+    <div class="bottom-sheet-backdrop" id="bottomSheetBackdrop"></div>
+    <div class="bottom-sheet" id="bottomSheet">
+        <div class="bottom-sheet-handle"></div>
+        <div class="bottom-sheet-actions">
+            <button type="button" class="bottom-sheet-btn" data-action="references">
+                <i class="fas fa-chevron-up"></i>
+                <span>Show References</span>
+            </button>
+            <a class="bottom-sheet-btn" href="https://discord.gg/KvJMEFhGjx" target="_blank" rel="noopener" data-action="discord">
+                <i class="fa-brands fa-discord"></i>
+                <span>Discord</span>
+            </a>
+            <button type="button" class="bottom-sheet-btn" data-action="feedback">
+                <i class="fa-regular fa-message"></i>
+                <span>Send Feedback</span>
+            </button>
+            <button type="button" class="bottom-sheet-btn" data-action="sources">
+                <i class="fas fa-book-open"></i>
+                <span>View Sources</span>
+            </button>
         </div>
     </div>
     <div id="sources">

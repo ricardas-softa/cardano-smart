@@ -618,6 +618,21 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 }
 
 /* ==========================================================================
+   Bottom Sheet (Mobile Actions Menu) - Hidden on desktop
+   ========================================================================== */
+.bottom-sheet-trigger {
+  display: none;
+}
+
+.bottom-sheet-backdrop {
+  display: none;
+}
+
+.bottom-sheet {
+  display: none;
+}
+
+/* ==========================================================================
    4. Responsive Design
    ========================================================================== */
 
@@ -785,44 +800,130 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     font-size: 0.9rem;
   }
 
+  /* Hide inline options row -- replaced by bottom sheet */
   .options-container {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-xs);
-    margin-top: 0;
-    flex-wrap: nowrap;
-  }
-
-  .left-options,
-  .right-options {
-    width: auto;
-    gap: var(--space-xs);
-  }
-
-  .show-sources,
-  .references-button,
-  .feedback-button,
-  .discord-link {
-    width: auto;
-    min-height: 0;
-    padding: 5px 10px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: var(--radius-full);
-    gap: 4px;
-    box-shadow: none;
-  }
-
-  .references-button span,
-  .feedback-button span,
-  .discord-link span {
     display: none;
   }
 
-  .show-sources {
-    font-size: 0.7rem;
-    padding: 5px 8px;
+  /* Menu trigger button in the form bar */
+  .bottom-sheet-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+    border: none;
+    color: var(--background-color);
+    cursor: pointer;
+    border-radius: var(--radius-full);
+    padding: 0;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+  }
+
+  .bottom-sheet-trigger:hover,
+  .bottom-sheet-trigger:active {
+    filter: brightness(1.1);
+    transform: none;
+  }
+
+  .bottom-sheet-trigger i {
+    font-size: 1rem;
+  }
+
+  /* Bottom sheet backdrop */
+  .bottom-sheet-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 150;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-base);
+  }
+
+  .bottom-sheet-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Bottom sheet panel */
+  .bottom-sheet {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 151;
+    background: var(--surface-color);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+    padding: var(--space-sm) var(--space-lg);
+    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+  }
+
+  .bottom-sheet.open {
+    transform: translateY(0);
+  }
+
+  .bottom-sheet-handle {
+    width: 36px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    margin: 0 auto var(--space-md);
+  }
+
+  .bottom-sheet-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .bottom-sheet-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    width: 100%;
+    min-height: 52px;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--surface-light);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    color: var(--text-color);
+    font-size: var(--base-font-size);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .bottom-sheet-btn:hover,
+  .bottom-sheet-btn:active {
+    background: rgba(var(--primary-color-rgb), 0.12);
+    border-color: rgba(var(--primary-color-rgb), 0.3);
+    transform: none;
+  }
+
+  .bottom-sheet-btn i {
+    font-size: 1.15rem;
+    width: 1.5rem;
+    text-align: center;
+    color: var(--primary-color);
+    flex-shrink: 0;
+  }
+
+  .bottom-sheet-btn span {
+    flex: 1;
+    text-align: left;
   }
 
   .popup-content {
@@ -935,12 +1036,14 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
     height: 36px;
   }
 
-  .show-sources,
-  .references-button,
-  .feedback-button,
-  .discord-link {
-    padding: 4px 8px;
-    font-size: 0.7rem;
+  .bottom-sheet-trigger {
+    width: 36px;
+    height: 36px;
+  }
+
+  .bottom-sheet-btn {
+    min-height: 48px;
+    padding: var(--space-sm) var(--space-md);
   }
 }
 
@@ -1015,8 +1118,6 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 
 /* ... rest of the styles ... */
 
-/* ... rest of the styles ... */
-
 /* Touch feedback for mobile */
 @media (hover: none) and (pointer: coarse) {
   button,
@@ -1047,6 +1148,16 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
   .feedback-button:hover,
   .discord-link:hover {
     transform: none;
+  }
+
+  .bottom-sheet-btn,
+  .bottom-sheet-trigger {
+    -webkit-tap-highlight-color: rgba(29, 185, 84, 0.2);
+  }
+
+  .bottom-sheet-btn:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
   }
 }
 
