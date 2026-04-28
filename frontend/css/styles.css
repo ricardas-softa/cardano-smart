@@ -618,6 +618,86 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
 }
 
 /* ==========================================================================
+   Welcome Screen
+   ========================================================================== */
+.welcome-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  animation: fadeIn var(--transition-base);
+}
+
+.welcome-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 32px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.welcome-icon i {
+  font-size: 2rem;
+  color: var(--background-color);
+}
+
+.welcome-title {
+  background: linear-gradient(120deg, #ffffff 0%, rgba(255, 255, 255, 0.65) 40%, var(--primary-color) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 700;
+}
+
+.welcome-subtitle {
+  color: var(--text-color-grey);
+  font-size: var(--base-font-size);
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.welcome-hints {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.welcome-hint-label {
+  color: var(--text-color-muted);
+  font-size: var(--code-font-size);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.welcome-hint {
+  background: transparent;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+  color: var(--primary-color);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  font-size: var(--code-font-size);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  max-width: 360px;
+}
+
+.welcome-hint:hover {
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
    Bottom Sheet (Mobile Actions Menu) - Hidden on desktop
    ========================================================================== */
 .bottom-sheet-trigger {
@@ -976,6 +1056,33 @@ body, button, input, .copy-button, .continue-button, .code-container, .code-head
   .message-content code {
     font-size: 0.85rem;
     padding: 0.15rem 0.35rem;
+  }
+
+  .welcome-screen {
+    padding: var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .welcome-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .welcome-icon i {
+    font-size: 1.5rem;
+  }
+
+  .welcome-title {
+    font-size: 1.3rem;
+  }
+
+  .welcome-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .welcome-hint {
+    font-size: 0.8rem;
+    padding: var(--space-xs) var(--space-md);
   }
 }
 

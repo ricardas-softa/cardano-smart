@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardano Smart</title>
 
-    <link rel="stylesheet" href="/css/styles.css?v=3.2">
+    <link rel="stylesheet" href="/css/styles.css?v=3.3">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -35,7 +35,19 @@
         <div class="text">Thinking...</div>
     </div>
     <div class="main-wrapper">
-        <div id="chatFeed"></div>
+        <div id="chatFeed">
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-icon"><i class="fa-solid fa-robot"></i></div>
+                <h2 class="welcome-title">Cardano Smart</h2>
+                <p class="welcome-subtitle">AI-powered assistant for Cardano blockchain documentation</p>
+                <div class="welcome-hints">
+                    <p class="welcome-hint-label">Try asking:</p>
+                    <button class="welcome-hint" data-question="What is Cardano?">What is Cardano?</button>
+                    <button class="welcome-hint" data-question="How do I write a Plutus smart contract?">How do I write a Plutus smart contract?</button>
+                    <button class="welcome-hint" data-question="What is the difference between Cardano and Ethereum?">Cardano vs Ethereum?</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="bottom-container">
         <form id="questionForm">

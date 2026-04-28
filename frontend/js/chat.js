@@ -81,6 +81,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Welcome screen hint buttons
+    document.querySelectorAll('.welcome-hint').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const q = btn.dataset.question;
+            document.getElementById('questionInput').value = q;
+            document.getElementById('questionForm').dispatchEvent(new Event('submit'));
+        });
+    });
 });
 
 
@@ -130,6 +139,9 @@ function responseIsIncomplete(messageContent) {
 }
 
 async function sendMessageToModel(isContinuation = false) {
+    const welcome = document.getElementById('welcomeScreen');
+    if (welcome) welcome.remove();
+
     showThinkingIndicator();
     
     const question = chatHistory[chatHistory.length - 1];
